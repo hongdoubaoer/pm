@@ -1,18 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教育产品增长与履约策略全景</title>
 <style>
-  .widget-root {
+  :root {
+    --kimi-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --kimi-color-text-primary: #1a1a1a;
+    --kimi-color-text-secondary: #666666;
+    --kimi-color-text-tertiary: #999999;
+    --kimi-color-text-quaternary: #bbbbbb;
+    --kimi-color-border: #e5e5e5;
+    --kimi-color-border-subtle: #f0f0f0;
+    --kimi-color-surface: #ffffff;
+    --kimi-color-surface-elevated: #f7f7f7;
+    --kimi-chart-1: #2563eb;
+    --kimi-chart-2: #dc2626;
+    --kimi-chart-3: #16a34a;
+    --kimi-chart-4: #7c3aed;
+    --kimi-chart-5: #6b7280;
+    --kimi-color-danger: #dc2626;
+    --kimi-color-positive: #16a34a;
+    --kimi-color-warning: #ea580c;
+    --kimi-color-accent: #2563eb;
+    --t-fast: 150ms;
+    --t-normal: 250ms;
+    --ease-out: cubic-bezier(0.0, 0.0, 0.2, 1);
+  }
+  body {
     font-family: var(--kimi-font-sans);
     color: var(--kimi-color-text-primary);
-    padding: 0;
+    background: var(--kimi-color-surface);
+    margin: 0;
+    padding: 24px 16px;
+  }
+  .widget-root {
     max-width: 720px;
     margin: 0 auto;
   }
   .widget-root * { box-sizing: border-box; }
   .widget-root button, .widget-root input, .widget-root select, .widget-root textarea { font: inherit; }
-  .widget-root svg text { font-family: var(--kimi-font-sans); }
 
-  .header {
-    margin-bottom: 20px;
-  }
+  .header { margin-bottom: 20px; }
   .header-title {
     font-size: 20px;
     font-weight: 500;
@@ -41,9 +71,7 @@
     position: relative;
     overflow: hidden;
   }
-  .line-card:hover {
-    border-color: var(--kimi-color-text-primary);
-  }
+  .line-card:hover { border-color: var(--kimi-color-text-primary); }
   .line-card.active {
     border-color: var(--kimi-color-text-primary);
     background: color-mix(in srgb, var(--kimi-color-text-primary) 4%, transparent);
@@ -82,6 +110,7 @@
     margin-bottom: 16px;
     border-bottom: 1px solid var(--kimi-color-border);
     padding-bottom: 0;
+    overflow-x: auto;
   }
   .tab-btn {
     background: none;
@@ -96,24 +125,16 @@
     transition: all var(--t-fast) var(--ease-out);
     white-space: nowrap;
   }
-  .tab-btn:hover {
-    color: var(--kimi-color-text-primary);
-  }
+  .tab-btn:hover { color: var(--kimi-color-text-primary); }
   .tab-btn.active {
     color: var(--kimi-color-text-primary);
     border-bottom-color: var(--kimi-color-text-primary);
   }
 
-  .panel {
-    display: none;
-  }
-  .panel.active {
-    display: block;
-  }
+  .panel { display: none; }
+  .panel.active { display: block; }
 
-  .funnel-container {
-    padding: 4px 0;
-  }
+  .funnel-container { padding: 4px 0; }
   .funnel-step {
     display: flex;
     align-items: center;
@@ -134,9 +155,7 @@
     position: relative;
     min-width: 120px;
   }
-  .funnel-bar:hover {
-    filter: brightness(1.1);
-  }
+  .funnel-bar:hover { filter: brightness(1.1); }
   .funnel-step .step-label {
     margin-left: 12px;
     font-size: 13px;
@@ -364,9 +383,7 @@
     padding: 12px;
     transition: all var(--t-fast) var(--ease-out);
   }
-  .sms-card:hover {
-    border-color: var(--kimi-color-text-primary);
-  }
+  .sms-card:hover { border-color: var(--kimi-color-text-primary); }
   .sms-state {
     font-size: 12px;
     font-weight: 500;
@@ -440,10 +457,11 @@
     .main-lines { grid-template-columns: 1fr; }
     .sms-flow { grid-template-columns: 1fr; }
     .level-metrics { grid-template-columns: 1fr; }
-    .tabs { overflow-x: auto; }
   }
 </style>
-
+<base target="_blank">
+</head>
+<body>
 <div class="widget-root">
   <div class="header">
     <h2 class="header-title">教育产品增长与履约策略全景</h2>
@@ -686,3 +704,5 @@
     event.currentTarget.classList.add('active');
   }
 </script>
+</body>
+</html>
