@@ -1,0 +1,688 @@
+<style>
+  .widget-root {
+    font-family: var(--kimi-font-sans);
+    color: var(--kimi-color-text-primary);
+    padding: 0;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .widget-root * { box-sizing: border-box; }
+  .widget-root button, .widget-root input, .widget-root select, .widget-root textarea { font: inherit; }
+  .widget-root svg text { font-family: var(--kimi-font-sans); }
+
+  .header {
+    margin-bottom: 20px;
+  }
+  .header-title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 8px 0;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--kimi-color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .main-lines {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .line-card {
+    border: 1px solid var(--kimi-color-border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all var(--t-fast) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+  .line-card:hover {
+    border-color: var(--kimi-color-text-primary);
+  }
+  .line-card.active {
+    border-color: var(--kimi-color-text-primary);
+    background: color-mix(in srgb, var(--kimi-color-text-primary) 4%, transparent);
+  }
+  .line-card .line-tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+  .line-card.tag-short .line-tag {
+    background: color-mix(in srgb, var(--kimi-chart-1) 12%, transparent);
+    color: var(--kimi-chart-1);
+  }
+  .line-card.tag-long .line-tag {
+    background: color-mix(in srgb, var(--kimi-chart-4) 12%, transparent);
+    color: var(--kimi-chart-4);
+  }
+  .line-card .line-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 6px 0;
+  }
+  .line-card .line-desc {
+    font-size: 13px;
+    color: var(--kimi-color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--kimi-color-border);
+    padding-bottom: 0;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--kimi-color-text-tertiary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all var(--t-fast) var(--ease-out);
+    white-space: nowrap;
+  }
+  .tab-btn:hover {
+    color: var(--kimi-color-text-primary);
+  }
+  .tab-btn.active {
+    color: var(--kimi-color-text-primary);
+    border-bottom-color: var(--kimi-color-text-primary);
+  }
+
+  .panel {
+    display: none;
+  }
+  .panel.active {
+    display: block;
+  }
+
+  .funnel-container {
+    padding: 4px 0;
+  }
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    position: relative;
+  }
+  .funnel-bar {
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    transition: all var(--t-normal) var(--ease-out);
+    cursor: pointer;
+    position: relative;
+    min-width: 120px;
+  }
+  .funnel-bar:hover {
+    filter: brightness(1.1);
+  }
+  .funnel-step .step-label {
+    margin-left: 12px;
+    font-size: 13px;
+    color: var(--kimi-color-text-secondary);
+    flex: 1;
+  }
+  .funnel-arrow {
+    text-align: center;
+    color: var(--kimi-color-text-quaternary);
+    font-size: 12px;
+    margin: 2px 0 6px 0;
+    padding-left: 60px;
+  }
+  .funnel-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--kimi-color-text-secondary);
+  }
+  .funnel-legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .funnel-legend .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .priority-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .priority-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 500;
+    color: var(--kimi-color-text-secondary);
+    border-bottom: 1px solid var(--kimi-color-border);
+    font-size: 12px;
+  }
+  .priority-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--kimi-color-border-subtle);
+    vertical-align: top;
+  }
+  .priority-table tr:hover td {
+    background: color-mix(in srgb, var(--kimi-color-text-primary) 2%, transparent);
+  }
+  .priority-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .badge-p0 {
+    background: color-mix(in srgb, var(--kimi-color-danger) 12%, transparent);
+    color: var(--kimi-color-danger);
+  }
+  .badge-p1 {
+    background: color-mix(in srgb, var(--kimi-chart-1) 12%, transparent);
+    color: var(--kimi-chart-1);
+  }
+  .badge-p2 {
+    background: color-mix(in srgb, var(--kimi-color-text-quaternary) 12%, transparent);
+    color: var(--kimi-color-text-secondary);
+  }
+
+  .id-system {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .id-layer {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .id-node {
+    flex: 1;
+    border: 1px solid var(--kimi-color-border);
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    transition: all var(--t-fast) var(--ease-out);
+    cursor: pointer;
+  }
+  .id-node:hover {
+    border-color: var(--kimi-color-text-primary);
+    background: color-mix(in srgb, var(--kimi-color-text-primary) 3%, transparent);
+  }
+  .id-node .id-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .id-node .id-desc {
+    font-size: 11px;
+    color: var(--kimi-color-text-secondary);
+    margin-top: 2px;
+  }
+  .id-arrow-down {
+    text-align: center;
+    color: var(--kimi-color-text-quaternary);
+    font-size: 14px;
+  }
+  .id-group {
+    border: 1px dashed var(--kimi-color-border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 4px;
+  }
+  .id-group-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--kimi-color-text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: var(--kimi-color-border);
+    border-radius: 1px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -22px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--kimi-color-text-primary);
+    border: 2px solid var(--kimi-color-surface);
+  }
+  .timeline-item.phase-1::before { background: var(--kimi-color-danger); }
+  .timeline-item.phase-2::before { background: var(--kimi-chart-1); }
+  .timeline-item.phase-3::before { background: var(--kimi-chart-4); }
+  .timeline-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+  }
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--kimi-color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .timeline-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .timeline-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--kimi-color-surface-elevated);
+    color: var(--kimi-color-text-secondary);
+  }
+
+  .risk-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .risk-layer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--kimi-color-border);
+  }
+  .risk-level {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    min-width: 64px;
+    text-align: center;
+  }
+  .risk-normal { background: color-mix(in srgb, var(--kimi-color-positive) 12%, transparent); color: var(--kimi-color-positive); }
+  .risk-light { background: color-mix(in srgb, var(--kimi-chart-1) 12%, transparent); color: var(--kimi-chart-1); }
+  .risk-medium { background: color-mix(in srgb, var(--kimi-color-warning) 12%, transparent); color: var(--kimi-color-warning); }
+  .risk-high { background: color-mix(in srgb, var(--kimi-color-danger) 12%, transparent); color: var(--kimi-color-danger); }
+  .risk-desc {
+    font-size: 13px;
+    color: var(--kimi-color-text-secondary);
+    flex: 1;
+  }
+  .risk-action {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .sms-flow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .sms-card {
+    border: 1px solid var(--kimi-color-border);
+    border-radius: 8px;
+    padding: 12px;
+    transition: all var(--t-fast) var(--ease-out);
+  }
+  .sms-card:hover {
+    border-color: var(--kimi-color-text-primary);
+  }
+  .sms-state {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--kimi-color-text-primary);
+    margin-bottom: 4px;
+  }
+  .sms-goal {
+    font-size: 13px;
+    color: var(--kimi-color-text-secondary);
+    line-height: 1.4;
+  }
+  .sms-arrow {
+    text-align: center;
+    color: var(--kimi-color-text-quaternary);
+    font-size: 12px;
+    grid-column: 1 / -1;
+    margin: -4px 0;
+  }
+
+  .level-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .level-branch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--kimi-color-border);
+    margin-bottom: 8px;
+  }
+  .level-branch .branch-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+  }
+  .level-branch .branch-title {
+    font-size: 14px;
+    font-weight: 500;
+    flex: 1;
+  }
+  .level-branch .branch-result {
+    font-size: 12px;
+    color: var(--kimi-color-text-secondary);
+  }
+  .level-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .metric-box {
+    border: 1px solid var(--kimi-color-border-subtle);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .metric-box .metric-name {
+    font-size: 11px;
+    color: var(--kimi-color-text-secondary);
+    margin-bottom: 4px;
+  }
+  .metric-box .metric-val {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 560px) {
+    .main-lines { grid-template-columns: 1fr; }
+    .sms-flow { grid-template-columns: 1fr; }
+    .level-metrics { grid-template-columns: 1fr; }
+    .tabs { overflow-x: auto; }
+  }
+</style>
+
+<div class="widget-root">
+  <div class="header">
+    <h2 class="header-title">教育产品增长与履约策略全景</h2>
+    <p class="header-sub">将零散需求点拆解为两条主线、一个漏斗、三层优先级</p>
+  </div>
+
+  <div class="main-lines">
+    <div class="line-card tag-short active" onclick="switchLine('short')">
+      <span class="line-tag">短期闭环</span>
+      <h3 class="line-title">增长转化链路</h3>
+      <p class="line-desc">小红书线索 → 留资 → 加微 → 下载 → 体验课 → 正价课转化</p>
+    </div>
+    <div class="line-card tag-long" onclick="switchLine('long')">
+      <span class="line-tag">长期底座</span>
+      <h3 class="line-title">交易履约系统</h3>
+      <p class="line-desc">课程/优惠券 ID 化、CCID 归因、自动植课、用户-孩子-课包关系</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('funnel')">转化链路</button>
+    <button class="tab-btn" onclick="switchTab('priority')">优先级矩阵</button>
+    <button class="tab-btn" onclick="switchTab('sms')">状态短信</button>
+    <button class="tab-btn" onclick="switchTab('level')">自动定级</button>
+    <button class="tab-btn" onclick="switchTab('id')">ID 底座</button>
+    <button class="tab-btn" onclick="switchTab('risk')">风控策略</button>
+    <button class="tab-btn" onclick="switchTab('timeline')">推进节奏</button>
+  </div>
+
+  <div class="panel active" id="panel-funnel">
+    <div class="funnel-container">
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:100%; background: var(--kimi-chart-1);">小红书曝光</div>
+        <span class="step-label">流量入口</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:92%; background: color-mix(in srgb, var(--kimi-chart-1) 85%, transparent); color: var(--kimi-color-text-primary);">落地页访问</div>
+        <span class="step-label">承接页优化</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:78%; background: color-mix(in srgb, var(--kimi-chart-1) 70%, transparent); color: var(--kimi-color-text-primary);">填写手机号 / 留资</div>
+        <span class="step-label">留资率</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:55%; background: var(--kimi-chart-2);">领课成功 + 加企微</div>
+        <span class="step-label">加微率（当前 60% → 目标 80%）</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:42%; background: color-mix(in srgb, var(--kimi-chart-2) 80%, transparent); color: white;">下载 App / 登录</div>
+        <span class="step-label">下载率、登录率</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:32%; background: var(--kimi-chart-3);">定级 + 体验课解锁</div>
+        <span class="step-label">首课开始率</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:22%; background: color-mix(in srgb, var(--kimi-chart-3) 75%, transparent); color: white;">体验课完课</div>
+        <span class="step-label">完课率</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:14%; background: var(--kimi-chart-4);">CC 跟进 → 正价课购买</div>
+        <span class="step-label">转化率</span>
+      </div>
+      <div class="funnel-arrow">↓</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="width:10%; background: color-mix(in srgb, var(--kimi-chart-4) 70%, transparent); color: white;">自动植课 → 持续上课</div>
+        <span class="step-label">履约闭环</span>
+      </div>
+    </div>
+    <div class="funnel-legend">
+      <span><span class="dot" style="background: var(--kimi-chart-1);"></span>获客阶段</span>
+      <span><span class="dot" style="background: var(--kimi-chart-2);"></span>激活阶段</span>
+      <span><span class="dot" style="background: var(--kimi-chart-3);"></span>体验阶段</span>
+      <span><span class="dot" style="background: var(--kimi-chart-4);"></span>转化阶段</span>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-priority">
+    <table class="priority-table">
+      <thead>
+        <tr><th style="width:48px;">优先级</th><th>事项</th><th>核心原因</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="priority-badge badge-p0">P0</span></td><td>落地页领课 + 加微链路优化</td><td>直接影响线索利用效率，最前置漏斗</td></tr>
+        <tr><td><span class="priority-badge badge-p0">P0</span></td><td>状态触发短信</td><td>按用户状态精准召回，快速提升加微/上课率</td></tr>
+        <tr><td><span class="priority-badge badge-p0">P0</span></td><td>漏斗数据看板</td><td>没有数据就无法判断优化是否有效</td></tr>
+        <tr><td><span class="priority-badge badge-p1">P1</span></td><td>自主定级 + 自动定级兜底 + CC 可见</td><td>影响首课体验和课程匹配质量</td></tr>
+        <tr><td><span class="priority-badge badge-p1">P1</span></td><td>体验课/正价课 ID 最小闭环</td><td>支撑后续标准化售卖，避免人工配置</td></tr>
+        <tr><td><span class="priority-badge badge-p1">P1</span></td><td>H5 支付 + CCID 归因</td><td>支撑销售转化和订单归属追踪</td></tr>
+        <tr><td><span class="priority-badge badge-p2">P2</span></td><td>优惠券规则系统</td><td>重要但可先简单版，后续再完善规则引擎</td></tr>
+        <tr><td><span class="priority-badge badge-p2">P2</span></td><td>多设备/IP 风控</td><td>需评估实际损失和误伤风险，分层处理</td></tr>
+        <tr><td><span class="priority-badge badge-p2">P2</span></td><td>完整标签体系</td><td>应该做，但不一定第一阶段做全</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel" id="panel-sms">
+    <p style="font-size:13px;color:var(--kimi-color-text-secondary);margin-bottom:12px;">短信目标不是"提醒一下"，而是推动用户完成当前阶段最关键的下一步动作</p>
+    <div class="sms-flow">
+      <div class="sms-card"><div class="sms-state">领课成功但未加微</div><div class="sms-goal">引导添加专属顾问企微</div></div>
+      <div class="sms-card"><div class="sms-state">加微但未下载 App</div><div class="sms-goal">引导下载并登录 App</div></div>
+      <div class="sms-arrow">↓ 状态流转 ↓</div>
+      <div class="sms-card"><div class="sms-state">下载但未登录 / 未上课</div><div class="sms-goal">引导登录并开始第一节课</div></div>
+      <div class="sms-card"><div class="sms-state">上了一节但未继续</div><div class="sms-goal">引导继续完成体验课</div></div>
+      <div class="sms-arrow">↓ 状态流转 ↓</div>
+      <div class="sms-card"><div class="sms-state">完课但未购课</div><div class="sms-goal">引导查看学习反馈 / 联系顾问</div></div>
+      <div class="sms-card"><div class="sms-state">购买后未开课</div><div class="sms-goal">提醒课包已开通，尽快上课</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-level">
+    <p style="font-size:13px;color:var(--kimi-color-text-secondary);margin-bottom:12px;">不建议直接下线自动定级，而是保留为兜底机制，同时补充自主定级入口</p>
+    <div class="level-flow">
+      <div class="level-branch">
+        <span class="branch-icon">✓</span>
+        <span class="branch-title">用户主动完成定级</span>
+        <span class="branch-result">使用主动定级结果</span>
+      </div>
+      <div style="text-align:center;color:var(--kimi-color-text-quaternary);font-size:13px;margin:4px 0;">或</div>
+      <div class="level-branch">
+        <span class="branch-icon">↻</span>
+        <span class="branch-title">用户未主动定级，但已下载/登录/入营</span>
+        <span class="branch-result">系统按年龄、地区自动匹配初始 Level</span>
+      </div>
+      <div style="padding-left:36px;font-size:12px;color:var(--kimi-color-text-secondary);margin:4px 0;">↓ CC 可见自动定级结果，用户或 CC 后续可修正</div>
+    </div>
+    <div class="level-metrics">
+      <div class="metric-box"><div class="metric-name">自主定级完成率</div><div class="metric-val">用户意愿指标</div></div>
+      <div class="metric-box"><div class="metric-name">自动定级覆盖率</div><div class="metric-val">兜底机制覆盖</div></div>
+      <div class="metric-box"><div class="metric-name">自动定级后调级率</div><div class="metric-val">准确性判断</div></div>
+      <div class="metric-box"><div class="metric-name">首课开始率</div><div class="metric-val">是否推动上课</div></div>
+      <div class="metric-box"><div class="metric-name">不同 Level 完课率</div><div class="metric-val">体验质量指标</div></div>
+      <div class="metric-box"><div class="metric-name">CC 修改率</div><div class="metric-val">系统可信度</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-id">
+    <div class="id-system">
+      <div class="id-layer">
+        <div class="id-node"><div class="id-name">用户 UID</div><div class="id-desc">家长账号主体</div></div>
+        <div class="id-node"><div class="id-name">孩子 Child ID</div><div class="id-desc">一个孩子一个 ID</div></div>
+      </div>
+      <div class="id-arrow-down">↓</div>
+      <div class="id-layer">
+        <div class="id-node"><div class="id-name">体验课 ID</div><div class="id-desc">产品线 · 课包 · Level</div></div>
+        <div class="id-node"><div class="id-name">正价课 ID</div><div class="id-desc">系统课/专题课 · 课包结构</div></div>
+        <div class="id-node"><div class="id-name">优惠券 ID</div><div class="id-desc">可用范围 · 有效期 · 叠加规则</div></div>
+      </div>
+      <div class="id-arrow-down">↓</div>
+      <div class="id-layer">
+        <div class="id-node"><div class="id-name">订单 ID</div><div class="id-desc">支付记录</div></div>
+        <div class="id-node"><div class="id-name">CCID / LPID</div><div class="id-desc">归因追踪</div></div>
+        <div class="id-node"><div class="id-name">渠道 ID</div><div class="id-desc">小红书/其他</div></div>
+      </div>
+      <div class="id-arrow-down">↓</div>
+      <div class="id-layer">
+        <div class="id-node" style="flex:2;"><div class="id-name">自动植课 + 履约</div><div class="id-desc">支付成功 → 自动开通课包 → 排课 → 上课提醒</div></div>
+      </div>
+      <div class="id-group">
+        <div class="id-group-title">CCID 归因需考虑的问题</div>
+        <div style="font-size:13px;color:var(--kimi-color-text-secondary);line-height:1.7;">
+          • 换设备购买时 CCID 是否还能识别？<br>
+          • 先 A CC 跟进、后 B CC 发链接，订单归属怎么算？<br>
+          • 链接被转发是否会误归因？<br>
+          • 是否需要同时记录 first_ccid 和 last_ccid？<br>
+          • 是否需要记录 LP 来源和渠道来源？
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-risk">
+    <p style="font-size:13px;color:var(--kimi-color-text-secondary);margin-bottom:12px;">目标是防倒卖，不是误伤正常家庭用户。教育场景下多设备、多地区、多成员使用是常态。</p>
+    <div class="risk-layers">
+      <div class="risk-layer">
+        <span class="risk-level risk-normal">正常</span>
+        <span class="risk-desc">家庭多设备、家长手机 + 孩子 iPad、家里和学校 IP 不同</span>
+        <span class="risk-action">允许</span>
+      </div>
+      <div class="risk-layer">
+        <span class="risk-level risk-light">轻微异常</span>
+        <span class="risk-desc">短时间跨城登录、同账号多设备同时播放</span>
+        <span class="risk-action">短信/微信验证</span>
+      </div>
+      <div class="risk-layer">
+        <span class="risk-level risk-medium">明显异常</span>
+        <span class="risk-desc">高频更换设备、多账号同设备登录</span>
+        <span class="risk-action">踢下线 + 风险提示</span>
+      </div>
+      <div class="risk-layer">
+        <span class="risk-level risk-high">高风险</span>
+        <span class="risk-desc">同账号长期异地多人使用、批量倒卖特征</span>
+        <span class="risk-action">限制登录 / 冻结 / 人工审核</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-timeline">
+    <div class="timeline">
+      <div class="timeline-item phase-1">
+        <h4 class="timeline-title">第一步：统一指标和口径</h4>
+        <p class="timeline-desc">确认各渠道流量、留资、加微、上课、购课转化数据；明确加微率口径定义；识别当前最大卡点环节。</p>
+        <div class="timeline-tags"><span class="timeline-tag">数据对齐</span><span class="timeline-tag">口径确认</span></div>
+      </div>
+      <div class="timeline-item phase-2">
+        <h4 class="timeline-title">第二步：拆成两个项目并行推进</h4>
+        <p class="timeline-desc">项目 A（增长转化）：落地页优化 + 状态短信 + 漏斗看板。项目 B（交易底座）：体验课/正价课 ID + H5 支付 + CCID 归因 + 自动植课。</p>
+        <div class="timeline-tags"><span class="timeline-tag">项目 A</span><span class="timeline-tag">项目 B</span></div>
+      </div>
+      <div class="timeline-item phase-3">
+        <h4 class="timeline-title">第三步：MVP 最小闭环验证</h4>
+        <p class="timeline-desc">先用一条产品线、一个课程包、一个 Level 范围跑通：落地页加微 → 状态短信 → 体验课 → 正价课支付 → CCID 归因 → 自动植课。</p>
+        <div class="timeline-tags"><span class="timeline-tag">单线验证</span><span class="timeline-tag">快速迭代</span></div>
+      </div>
+      <div class="timeline-item phase-1">
+        <h4 class="timeline-title">第四步：逐步扩展</h4>
+        <p class="timeline-desc">验证转化提升和履约闭环有效后，再扩展到更多 Level、课程包、优惠券规则和风控策略。</p>
+        <div class="timeline-tags"><span class="timeline-tag">规模化</span><span class="timeline-tag">风控完善</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-' + tabId).classList.add('active');
+  }
+  function switchLine(line) {
+    document.querySelectorAll('.line-card').forEach(card => card.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+  }
+</script>
