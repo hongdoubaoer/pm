@@ -573,10 +573,24 @@
           {
             value: 'A',
             label: '按 PID 配置',
+            tag: '家庭共享',
+            tagColor: 'blue',
+            desc: '请假 / 休学权益跟着家庭（PID）走，同一家庭下多个孩子共用一份权益。',
+            pros: '家庭内权益统一管理，购课后所有孩子共享，运营配置简单。',
+            cons: '多孩子家庭可能互相占用权益，导致某个孩子实际可用次数不足。',
+            effects: '权益查询、扣减、赠送都以 PID 为维度；家长端按家庭展示权益。',
+            copyText: '请假 / 休学权益按 PID（家庭）维度配置，同一家庭下多个孩子共用权益。'
           },
           {
             value: 'B',
             label: '按 SID 配置',
+            tag: '学生独立',
+            tagColor: 'purple',
+            desc: '请假 / 休学权益跟着学生（SID）走，每个孩子单独拥有、单独消耗。',
+            pros: '每个孩子权益独立，不会互相占用，账务更清晰。',
+            cons: '同一家庭购课后需要分别给每个孩子配置权益，运营成本略高。',
+            effects: '权益查询、扣减、赠送都以 SID 为维度；家长端按学生展示权益。',
+            copyText: '请假 / 休学权益按 SID（学生）维度配置，每个学生单独拥有和消耗权益。'
           }
         ]
       },
@@ -632,7 +646,9 @@
             tag: '统一规则',
             tagColor: 'blue',
             desc: '两条业务线统一使用24h内取消扣课时、请假不扣课时的规则。',
-            effects: '研发统一规则判断。',
+            pros: '规则统一，研发和测试只需维护一套逻辑，长期维护成本低。',
+            cons: '美教现有用户习惯会被改变，需要提前通知和过渡。',
+            effects: '研发统一规则判断，不再按业务线区分。',
             copyText: '本次新增扣课时规则同时适用于 sayABC 和美教，两条业务线统一使用新规则。'
           },
           {
@@ -640,6 +656,11 @@
             label: '其他规则，由业务补充',
             tag: '需补充',
             tagColor: 'gray',
+            desc: '以上两个选项都不符合业务预期，需要业务补充具体规则。',
+            pros: '可以完全按业务实际情况定制，不受预设选项限制。',
+            cons: '需要额外沟通确认，可能延迟研发排期。',
+            effects: '待业务补充具体规则后，再评估研发影响。',
+            copyText: '以上选项均不符合，业务将另行补充具体扣课时规则。'
           }
         ]
       },
@@ -736,17 +757,22 @@
     }
 
     function renderOption(q, opt) {
+      const tagHtml = opt.tag ? `<span class="tag ${opt.tagColor || 'gray'}">${opt.tag}</span>` : '';
+      const descHtml = opt.desc || '';
+      const prosHtml = opt.pros ? `<div class="tradeoff-row good"><b>优点</b><br>${opt.pros}</div>` : '';
+      const consHtml = opt.cons ? `<div class="tradeoff-row cost"><b>代价</b><br>${opt.cons}</div>` : '';
+      const effectsHtml = opt.effects ? `<div class="tradeoff-row effect"><b>影响</b><br>${opt.effects}</div>` : '';
       return `<button class="option-card" id="option-${q.id}-${opt.value}" onclick="selectOption('${q.id}', '${opt.value}')">
         <div class="option-top">
           <span class="option-letter">${opt.value}</span>
           <div class="option-title">${opt.label}</div>
-          <span class="tag ${opt.tagColor}">${opt.tag}</span>
+          ${tagHtml}
         </div>
-        <div class="option-desc">${opt.desc}</div>
+        <div class="option-desc">${descHtml}</div>
         <div class="tradeoff">
-          <div class="tradeoff-row good"><b>优点</b><br>${opt.pros}</div>
-          <div class="tradeoff-row cost"><b>代价</b><br>${opt.cons}</div>
-          <div class="tradeoff-row effect"><b>影响</b><br>${opt.effects}</div>
+          ${prosHtml}
+          ${consHtml}
+          ${effectsHtml}
         </div>
       </button>`;
     }
@@ -791,7 +817,7 @@
       }
       answerList.innerHTML = selectedQuestions.map(q => {
         const opt = getSelectedOption(q);
-        return `<div class="answer-item"><b>${q.title}</b><span>${opt.value}. ${opt.label}<br>${opt.effects}</span></div>`;
+        return `<div class="answer-item"><b>${q.title}</b><span>${opt.value}. ${opt.label}${opt.effects ? '<br>' + opt.effects : ''}</span></div>`;
       }).join('');
     }
 
@@ -816,7 +842,7 @@
         const opt = getSelectedOption(q);
         lines.push(`${q.title}`);
         lines.push(opt ? `- 选择：${opt.value}. ${opt.label}` : '- 选择：待确认');
-        lines.push(opt ? `- 规则：${opt.copyText}` : '- 规则：暂无，需业务补充选择');
+        lines.push(opt ? `- 规则：${opt.copyText || opt.label}` : '- 规则：暂无，需业务补充选择');
         lines.push('');
       });
 
