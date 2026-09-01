@@ -3,596 +3,908 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>增长承接与课程履约效率项目｜需求分析与产品方案</title>
+  <title>请假休学规则决策面板</title>
   <style>
     :root {
-      --bg: #f9f9f7;
-      --surface: #fcfcfb;
+      --bg: #f5f7fb;
       --card: #ffffff;
-      --ink: #0b0b0b;
-      --ink-2: #52514e;
-      --muted: #898781;
-      --line: #e1e0d9;
-      --axis: #c3c2b7;
-      --blue: #2a78d6;
-      --blue-dark: #1c5cab;
-      --blue-soft: #eaf3ff;
-      --orange: #eb6834;
-      --orange-soft: #fff1ea;
-      --aqua: #1baf7a;
-      --aqua-soft: #e8fbf3;
-      --yellow: #eda100;
-      --yellow-soft: #fff7df;
-      --violet: #4a3aa7;
-      --violet-soft: #f0eefc;
-      --red: #e34948;
-      --red-soft: #fff0f0;
-      --shadow: 0 24px 70px rgba(11, 11, 11, .10);
-      --shadow-soft: 0 12px 32px rgba(11, 11, 11, .07);
-      --radius-xl: 32px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #e6eaf2;
+      --blue: #2563eb;
+      --blue2: #eaf1ff;
+      --green: #12a66a;
+      --green2: #e9f8f1;
+      --orange: #f59e0b;
+      --orange2: #fff5df;
+      --red: #e5484d;
+      --red2: #fff0f1;
+      --purple: #7c3aed;
+      --purple2: #f3ecff;
+      --shadow: 0 18px 45px rgba(23, 32, 51, .1);
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      background:
-        radial-gradient(circle at 10% -5%, rgba(42,120,214,.16), transparent 30%),
-        radial-gradient(circle at 90% 0%, rgba(27,175,122,.13), transparent 30%),
-        linear-gradient(180deg, #fff 0%, var(--bg) 34%, #f4f1eb 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       color: var(--ink);
-      line-height: 1.62;
+      background:
+        radial-gradient(circle at 8% 0, #dfeaff 0, transparent 26%),
+        radial-gradient(circle at 94% 0, #f5eafe 0, transparent 24%),
+        var(--bg);
+      font-size: 14px;
     }
 
-    .wrap { width: min(1200px, calc(100vw - 44px)); margin: 0 auto; }
-    .hero { padding: 56px 0 24px; }
-    .hero-card {
-      border-radius: 36px;
-      padding: 44px;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.96), rgba(252,252,251,.90)),
-        radial-gradient(circle at 92% 12%, rgba(42,120,214,.14), transparent 34%);
-      border: 1px solid rgba(225,224,217,.95);
-      box-shadow: var(--shadow);
+    button, textarea { font-family: inherit; }
+
+    .page {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 26px 22px 64px;
+    }
+
+    .hero {
       display: grid;
-      grid-template-columns: 1.18fr .82fr;
-      gap: 28px;
+      grid-template-columns: 1.35fr .8fr;
+      gap: 18px;
+      margin-bottom: 16px;
       align-items: stretch;
     }
+
+    .hero-main, .hero-side, .card {
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(230, 234, 242, .95);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(23, 32, 51, .06);
+    }
+
+    .hero-main { padding: 26px; }
+    .hero-side { padding: 18px; }
+
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--blue-dark);
-      background: var(--blue-soft);
-      border: 1px solid rgba(42,120,214,.16);
+      gap: 6px;
+      color: #1d4ed8;
+      background: var(--blue2);
+      border: 1px solid #c7d7fe;
       border-radius: 999px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 850;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 14px;
     }
+
     h1 {
-      margin: 20px 0 14px;
-      font-size: clamp(38px, 6vw, 72px);
-      line-height: 1.02;
-      letter-spacing: -3px;
+      margin: 0 0 10px;
+      font-size: 32px;
+      letter-spacing: 0;
+      line-height: 1.18;
     }
+
     .subtitle {
-      max-width: 780px;
-      color: var(--ink-2);
-      font-size: 20px;
       margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
     }
-    .hero-highlight {
-      margin-top: 26px;
-      padding: 20px;
-      border-radius: 24px;
-      color: #fff;
-      background: linear-gradient(135deg, #0b0b0b, #1c5cab 58%, #0f766e);
-    }
-    .hero-highlight strong { display: block; font-size: 22px; margin-bottom: 6px; }
-    .hero-highlight span { color: rgba(255,255,255,.86); }
-    .hero-side { display: grid; gap: 12px; }
-    .metric-card {
-      border-radius: 22px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      padding: 18px;
-      box-shadow: 0 8px 24px rgba(11,11,11,.05);
-    }
-    .metric-card small { display: block; color: var(--muted); font-weight: 800; margin-bottom: 4px; }
-    .metric-card b { font-size: 21px; }
-    .metric-card p { margin: 4px 0 0; color: var(--ink-2); font-size: 14px; }
 
-    .tabs-shell {
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px;
+      background: #fbfcff;
+      min-height: 74px;
+    }
+
+    .metric b {
+      display: block;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    .hero-side h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .hero-side ol {
+      margin: 0;
+      padding-left: 20px;
+      color: #475467;
+      line-height: 1.85;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .rail {
       position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: 12px 0;
-      background: rgba(249,249,247,.78);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(225,224,217,.72);
-    }
-    .tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 4px;
-      border: 1px solid rgba(225,224,217,.92);
-      border-radius: 999px;
-      background: rgba(255,255,255,.78);
-      box-shadow: 0 12px 28px rgba(11,11,11,.05);
-    }
-    .tab-btn {
-      border: 0;
-      background: transparent;
-      border-radius: 999px;
-      padding: 10px 16px;
-      white-space: nowrap;
-      color: var(--ink-2);
-      font-weight: 850;
-      cursor: pointer;
-      transition: .18s ease;
-      font-family: inherit;
-    }
-    .tab-btn:hover { background: #f3f1eb; }
-    .tab-btn.active { color: #fff; background: var(--ink); box-shadow: 0 10px 22px rgba(11,11,11,.16); }
-
-    .tab-panel { display: none; padding: 30px 0 56px; }
-    .tab-panel.active { display: block; }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin: 24px 0 16px; }
-    .kicker { color: var(--blue); font-size: 13px; font-weight: 950; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
-    h2 { margin: 0; font-size: clamp(28px, 4vw, 44px); line-height: 1.12; letter-spacing: -1.4px; }
-    h3 { margin: 0 0 8px; font-size: 21px; letter-spacing: -.2px; }
-    p { margin: 0; }
-    .desc { max-width: 620px; color: var(--muted); font-size: 15px; }
-
-    .panel, .card {
-      background: rgba(255,255,255,.94);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-    }
-    .panel { padding: 24px; }
-    .card { padding: 20px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .muted { color: var(--muted); }
-
-    .thesis {
+      top: 18px;
       display: grid;
-      grid-template-columns: .78fr 1.22fr;
-      gap: 16px;
-      align-items: stretch;
-    }
-    .definition {
-      padding: 26px;
-      border-radius: 26px;
-      color: #fff;
-      background: linear-gradient(135deg, #111827, #2a78d6 58%, #1baf7a);
-      box-shadow: var(--shadow-soft);
-    }
-    .definition b { display: block; font-size: 24px; line-height: 1.28; margin-bottom: 10px; }
-    .definition span { color: rgba(255,255,255,.86); }
-    .logic-stack { display: grid; gap: 12px; }
-    .logic-item {
-      padding: 18px;
-      border-radius: 20px;
-      border: 1px solid var(--line);
-      background: var(--surface);
-    }
-    .logic-item strong { display: block; margin-bottom: 4px; }
-    .logic-item p { color: var(--ink-2); font-size: 14px; }
-
-    .scenario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .scenario {
-      display: grid;
-      grid-template-columns: 68px 1fr;
       gap: 14px;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: var(--card);
     }
-    .avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
+
+    .card-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .card-head h2, .card-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-top: 5px;
+    }
+
+    .decision-card {
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .decision-body {
+      padding: 18px 20px 20px;
+    }
+
+    .context-box {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #dbe6fb;
+      background: #f8fbff;
+      border-radius: 14px;
+      padding: 14px;
+      color: #475467;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .context-box b {
+      color: #1d4ed8;
+      font-size: 13px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .option-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .option-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 15px;
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: .16s ease;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: inherit;
+    }
+
+    .option-card:hover {
+      transform: translateY(-1px);
+      border-color: #afc4ff;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, .08);
+    }
+
+    .option-card.active {
+      border-color: #8fb0ff;
+      background: linear-gradient(180deg, #f7faff, #ffffff);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .option-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .option-letter {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      color: #1d4ed8;
+      background: var(--blue2);
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .option-title {
+      font-weight: 900;
+      font-size: 15px;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tag.blue { color: #1d4ed8; background: var(--blue2); }
+    .tag.green { color: #08784f; background: var(--green2); }
+    .tag.orange { color: #a15c07; background: var(--orange2); }
+    .tag.red { color: #b42318; background: var(--red2); }
+    .tag.purple { color: #6d28d9; background: var(--purple2); }
+    .tag.gray { color: #475467; background: #f2f4f7; }
+
+    .option-desc {
+      color: #475467;
+      line-height: 1.62;
+      font-size: 13px;
+      min-height: 42px;
+    }
+
+    .tradeoff {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .tradeoff-row {
+      border-radius: 12px;
+      padding: 10px 11px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #475467;
+    }
+
+    .tradeoff-row.good { background: var(--green2); color: #066044; }
+    .tradeoff-row.cost { background: var(--orange2); color: #8a4a05; }
+    .tradeoff-row.effect { background: #f8fafc; color: #475467; border: 1px dashed #ccd6e4; }
+
+    .progress-card, .summary-card, .output-card { overflow: hidden; }
+
+    .progress-body, .summary-body, .output-body { padding: 16px; }
+
+    .progress-bar {
+      height: 9px;
+      background: #eef2f7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 14px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      border-radius: inherit;
+      transition: width .2s ease;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 9px;
+      color: #475467;
+      background: #fff;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
       display: grid;
       place-items: center;
-      color: #fff;
-      font-size: 22px;
-      font-weight: 950;
-      background: var(--blue);
+      border-radius: 8px;
+      background: #f2f4f7;
+      color: #667085;
+      font-weight: 900;
+      font-size: 12px;
     }
-    .scenario:nth-child(2) .avatar { background: var(--aqua); }
-    .scenario:nth-child(3) .avatar { background: var(--orange); }
-    .scenario:nth-child(4) .avatar { background: var(--violet); }
-    .scenario:nth-child(5) .avatar { background: var(--red); }
-    .scenario p { color: var(--muted); font-size: 14px; }
-    .derive { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--axis); color: var(--ink-2); font-size: 14px; }
-    .derive b { color: var(--ink); }
 
-    .criteria { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .criterion { padding: 18px; border-radius: 22px; border: 1px solid var(--line); background: var(--card); }
-    .criterion .num { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 11px; color: #fff; background: var(--blue); font-weight: 950; margin-bottom: 10px; }
-    .criterion:nth-child(2) .num { background: var(--orange); }
-    .criterion:nth-child(3) .num { background: var(--aqua); }
-    .criterion:nth-child(4) .num { background: var(--violet); }
-    .criterion p { color: var(--muted); font-size: 14px; }
+    .step-item.done {
+      border-color: #a9e8ca;
+      background: #f9fffb;
+    }
 
-    .priority-board { display: grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
-    .lane { display: grid; gap: 12px; }
-    .prio-card {
-      border-radius: 22px;
-      border: 1px solid var(--line);
-      background: var(--card);
-      padding: 18px;
+    .step-item.done .step-num {
+      background: var(--green2);
+      color: #08784f;
+    }
+
+    .answer-list {
       display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 14px;
+      gap: 9px;
     }
-    .prio-badge { height: 40px; border-radius: 14px; display: grid; place-items: center; color: #fff; font-weight: 950; }
-    .p0 { background: var(--red); }
-    .p1 { background: var(--orange); }
-    .p2 { background: var(--blue); }
-    .watch { background: #52514e; }
-    .prio-card ul { margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
 
-    .matrix-simple { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 100%; }
-    .matrix-cell { border-radius: 22px; padding: 18px; border: 1px solid var(--line); background: var(--surface); }
-    .matrix-cell b { display: block; margin-bottom: 6px; }
-    .matrix-cell p { color: var(--muted); font-size: 14px; }
-    .matrix-cell.hot { background: var(--red-soft); border-color: #ffd1d1; }
-    .matrix-cell.build { background: var(--blue-soft); border-color: #cae2ff; }
-    .matrix-cell.experiment { background: var(--orange-soft); border-color: #ffd8c6; }
-    .matrix-cell.defer { background: #f1f1ee; }
+    .answer-item {
+      border: 1px solid var(--line);
+      background: #fbfcff;
+      border-radius: 12px;
+      padding: 11px;
+    }
 
-    .module-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .module-btn { border: 1px solid var(--line); background: var(--card); color: var(--ink-2); border-radius: 999px; padding: 9px 13px; cursor: pointer; font-weight: 850; font-family: inherit; }
-    .module-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .module-panel { display: none; }
-    .module-panel.active { display: block; }
-    .design-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 16px; }
-    .design-block { padding: 20px; border-radius: 22px; border: 1px solid var(--line); background: var(--surface); }
-    .design-block ul { margin: 10px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; }
-    .design-block li { margin: 6px 0; }
-    .checklist { display: grid; gap: 10px; }
-    .check { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 12px; border-radius: 16px; background: #fff; border: 1px solid var(--line); font-size: 14px; color: var(--ink-2); }
-    .check i { width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center; background: var(--aqua-soft); color: #087252; font-style: normal; font-weight: 950; }
+    .answer-item b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
 
-    .flow { display: grid; grid-template-columns: repeat(7, minmax(120px, 1fr)); gap: 10px; position: relative; }
-    .flow::before { content:""; position: absolute; left: 5%; right: 5%; top: 31px; height: 3px; background: linear-gradient(90deg, var(--blue), var(--aqua), var(--orange), var(--violet), var(--red)); opacity: .24; }
-    .step { position: relative; z-index: 1; border-radius: 18px; border: 1px solid var(--line); background: var(--card); padding: 14px; min-height: 148px; }
-    .dot { width: 24px; height: 24px; border-radius: 999px; background: var(--blue); box-shadow: 0 0 0 7px var(--card); margin-bottom: 16px; }
-    .step:nth-child(2) .dot { background: #3987e5; }
-    .step:nth-child(3) .dot { background: var(--aqua); }
-    .step:nth-child(4) .dot { background: var(--yellow); }
-    .step:nth-child(5) .dot { background: var(--orange); }
-    .step:nth-child(6) .dot { background: var(--violet); }
-    .step:nth-child(7) .dot { background: var(--red); }
-    .step strong { display: block; margin-bottom: 4px; }
-    .step span { color: var(--muted); font-size: 13px; }
+    .answer-item span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
 
-    .funnel { display: grid; gap: 10px; }
-    .funnel-row { display: grid; grid-template-columns: 172px 1fr 190px; gap: 14px; align-items: center; color: var(--ink-2); font-size: 14px; }
-    .bar-wrap { height: 34px; border-radius: 999px; background: #edf1f4; border: 1px solid #dfe4e8; overflow: hidden; }
-    .bar { height: 100%; min-width: 60px; border-radius: 999px; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; color: #fff; font-size: 12px; font-weight: 950; background: linear-gradient(90deg, var(--blue), var(--aqua)); }
-    .bar.mid { background: linear-gradient(90deg, var(--yellow), var(--orange)); }
-    .bar.low { background: linear-gradient(90deg, var(--orange), var(--red)); }
-    .caption { margin-top: 12px; color: var(--muted); font-size: 12px; }
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 10px 0;
+    }
 
-    .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .model-card code { display: inline-flex; margin: 3px 4px 3px 0; padding: 4px 7px; border-radius: 8px; background: #eef2ff; color: #2845a8; font-size: 12px; }
-    .model-card .rel { display: block; margin-top: 10px; color: var(--muted); font-size: 13px; }
+    .copy-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
 
-    table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
-    th, td { padding: 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; font-size: 14px; }
-    th { background: #f2f1ec; color: var(--ink-2); font-weight: 950; }
-    td { color: #4a4a46; }
-    tr:last-child td { border-bottom: 0; }
-    .priority { display: inline-flex; padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 950; }
-    .pri-p0 { background: var(--red-soft); color: #b72828; }
-    .pri-p1 { background: var(--orange-soft); color: #b94818; }
-    .pri-p2 { background: var(--blue-soft); color: #1c5cab; }
-    .pri-watch { background: #eeeeea; color: var(--ink-2); }
-    .module-name { color: var(--ink); font-weight: 950; }
+    .copy-row .hint { margin: 0; }
 
-    .roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .road { padding: 22px; border-radius: 24px; border: 1px solid var(--line); background: var(--card); }
-    .road .n { width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center; background: var(--blue); color: #fff; font-weight: 950; margin-bottom: 12px; }
-    .road:nth-child(2) .n { background: var(--orange); }
-    .road:nth-child(3) .n { background: var(--violet); }
-    .road ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
-    .road li { margin: 7px 0; }
-    .note { padding: 18px; border-radius: 20px; background: var(--yellow-soft); border: 1px solid #f3d37c; color: #76510a; }
-    .footer { padding: 24px 0 52px; text-align: center; color: var(--muted); font-size: 13px; }
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 9px 13px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .16s ease;
+      white-space: nowrap;
+    }
 
-    @media (max-width: 980px) {
-      .hero-card, .thesis, .grid-2, .grid-3, .grid-4, .scenario-grid, .criteria, .priority-board, .design-grid, .model-grid, .roadmap { grid-template-columns: 1fr; }
-      .section-head { display: block; }
-      .desc { margin-top: 8px; }
-      .flow { grid-template-columns: 1fr; }
-      .flow::before { display: none; }
-      .funnel-row { grid-template-columns: 1fr; }
-      h1 { letter-spacing: -1.6px; }
-      .hero-card { padding: 28px; }
+    .btn.primary { color: #fff; background: var(--blue); }
+    .btn.primary:hover { background: #1d4ed8; }
+    .btn.secondary { color: #344054; background: #eef2f7; }
+    .btn.ghost { color: #1d4ed8; background: var(--blue2); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #344054;
+      background: #fbfcff;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 80;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-14px);
+      opacity: 0;
+      pointer-events: none;
+      color: #fff;
+      background: #111827;
+      border-radius: 999px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      transition: .2s ease;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .mobile-output { display: none; }
+
+    @media (max-width: 1080px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .rail { position: static; }
+      .desktop-output { display: none; }
+      .mobile-output { display: block; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 18px 14px 40px; }
+      .metrics, .option-grid, .option-grid.three { grid-template-columns: 1fr; }
+      .context-box { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+      .hero-main, .hero-side, .decision-body, .card-head { padding: 16px; }
+      .copy-row { align-items: stretch; flex-direction: column; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header class="hero wrap">
-    <div class="hero-card">
-      <div>
-        <span class="eyebrow">需求分析 · 产品方案 · 落地节奏</span>
-        <h1>增长承接与课程履约效率项目</h1>
-        <p class="subtitle">将报名页、短信、定级、商品 ID、订单归因和自动植课，统一放到“渠道线索 → 加微承接 → 学习激活 → 正价购买 → 自动履约”的闭环里设计。</p>
-        <div class="hero-highlight">
-          <strong>项目定义</strong>
-          <span>这不是单点功能优化，而是一次增长承接与课程履约链路的系统化改造：前端提升有效线索转化，中端提升首课激活和销售承接，后端补齐交易履约底座。</span>
+  <div class="toast" id="toast"></div>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">请假 / 休学规则确认</div>
+        <h1>业务决策面板</h1>
+        <p class="subtitle">这页用于快速确认研发落地前的关键规则。请按每张卡片选择 A / B / C，全部选完后，页面底部会自动生成一段确认文字，可以一键复制发回给产品。</p>
+        <div class="metrics">
+          <div class="metric"><b>5</b><span>需要拍板的规则</span></div>
+          <div class="metric"><b>2-3</b><span>每题选项数量</span></div>
+          <div class="metric"><b>自动</b><span>生成确认文字</span></div>
+          <div class="metric"><b>1键</b><span>复制结果给产品</span></div>
         </div>
       </div>
       <aside class="hero-side">
-        <div class="metric-card"><small>核心目标</small><b>提升全链路转化效率</b><p>不只看加微率，也要看首课、完课、购买和植课成功。</p></div>
-        <div class="metric-card"><small>短期抓手</small><b>报名页 + 企微承接 + 状态短信</b><p>先用低成本实验验证 60% → 80% 的真实空间。</p></div>
-        <div class="metric-card"><small>长期底座</small><b>商品 ID + CCID + SID</b><p>支撑订单归因、自动履约、续报和拓科。</p></div>
+        <h2>怎么使用</h2>
+        <ol>
+          <li>先看每题的背景和选项影响。</li>
+          <li>直接点击最符合业务规则的选项。</li>
+          <li>全部选完后复制底部文本。</li>
+        </ol>
       </aside>
-    </div>
-  </header>
-
-  <div class="tabs-shell">
-    <div class="wrap">
-      <nav class="tabs" aria-label="页面导航">
-        <button class="tab-btn active" data-tab="analysis">1 需求分析</button>
-        <button class="tab-btn" data-tab="priority">2 优先级评估</button>
-        <button class="tab-btn" data-tab="design">3 功能方案</button>
-        <button class="tab-btn" data-tab="data">4 数据与对象模型</button>
-        <button class="tab-btn" data-tab="list">5 需求清单与落地</button>
-      </nav>
-    </div>
-  </div>
-
-  <main class="wrap">
-    <section class="tab-panel active" id="tab-analysis">
-      <div class="section-head">
-        <div><div class="kicker">Analysis</div><h2>先把“一片式输入”翻译成业务问题</h2></div>
-        <p class="desc">这批输入里混合了运营动作、产品功能、系统底座和风控策略。第一步不是逐条排期，而是先判断它们共同服务哪条业务闭环。</p>
-      </div>
-
-      <div class="thesis">
-        <div class="definition">
-          <b>统一问题定义</b>
-          <span>当前要解决的是：小红书等渠道带来的线索，如何更稳定地完成报名、加微、学习激活、正价购买和自动履约；同时降低人工配置、订单归因和账号倒卖带来的损耗。</span>
-        </div>
-        <div class="logic-stack">
-          <div class="logic-item"><strong>1. 不能把加微率当成唯一目标</strong><p>加微率是中间指标。若加微提升但首课、完课、购买不提升，说明只是把用户提前拉进企微，没有提升业务结果。</p></div>
-          <div class="logic-item"><strong>2. 不能把 ID 化当成配置需求</strong><p>体验课 ID、正价课 ID、优惠券 ID、CCID，本质是在补交易履约对象模型，影响支付、植课、归因、续报和拓科。</p></div>
-          <div class="logic-item"><strong>3. 风控不能一刀切</strong><p>多设备、多 IP 可能是家庭正常场景，也可能是倒卖风险。应先监控和分层，再做验证、限制和处置。</p></div>
-        </div>
-      </div>
-
-      <div class="section-head">
-        <div><div class="kicker">Scenario First</div><h2>按场景推导需求</h2></div>
-        <p class="desc">把“要做什么功能”前置还原为“谁遇到了什么阻塞”，再推导对应产品能力。</p>
-      </div>
-      <div class="panel">
-        <div class="scenario-grid">
-          <div class="scenario"><div class="avatar">家</div><div><h3>家长：报名后不知道下一步</h3><p>从内容平台进入后，用户注意力短。如果提交手机号后只是“领取成功”，缺少继续添加老师的明确动机。</p><div class="derive"><b>推导需求：</b>报名后进入明确第二步，突出“添加老师后领取课表 / 入群 / 获得上课提醒”。</div></div></div>
-          <div class="scenario"><div class="avatar">CC</div><div><h3>CC：承接与归因不稳定</h3><p>如果二维码分配、CCID、订单归因不稳定，销售承接和复盘都依赖人工判断。</p><div class="derive"><b>推导需求：</b>按渠道/批次/CC 动态分配企微；购课链接带 CCID；订单归因可回溯。</div></div></div>
-          <div class="scenario"><div class="avatar">SID</div><div><h3>Student：级别和首课体验不确定</h3><p>定级的目标不是“多一个流程”，而是降低首课前阻力，同时让学生进入合适难度。</p><div class="derive"><b>推导需求：</b>自动定级做兜底，自主定级提升准确性，CC 可查看并修正定级结果。</div></div></div>
-          <div class="scenario"><div class="avatar">运</div><div><h3>运营：活动商品难配置</h3><p>体验课、正价课、优惠券如果不能标准化，每次活动都需要人工协作和线下对齐。</p><div class="derive"><b>推导需求：</b>体验课/正价课/优惠券 ID 化，支持标签、有效期、适用范围、限报和互斥。</div></div></div>
-          <div class="scenario"><div class="avatar">风</div><div><h3>平台：需要治理倒卖风险</h3><p>同账号多地、多设备可能是倒卖，也可能是家庭正常使用，策略必须避免误伤。</p><div class="derive"><b>推导需求：</b>先做异常识别与监控，再引入风险验证、并发上限、白名单和申诉机制。</div></div></div>
-        </div>
-      </div>
-
-      <div class="section-head">
-        <div><div class="kicker">To Do</div><h2>这个项目到底要做什么</h2></div>
-        <p class="desc">把链路、指标、功能和系统底座统一成一个可执行目标。</p>
-      </div>
-      <div class="grid-3">
-        <div class="card"><h3>前端：提升有效承接</h3><p class="muted">优化报名页、企微承接页和短信触达，让线索从“报名”更稳定地进入“可沟通、可上课”的状态。</p></div>
-        <div class="card"><h3>中端：提升学习激活</h3><p class="muted">用自动定级兜底、自主定级补准确性，减少首课前阻力，并通过首课/完课指标验证。</p></div>
-        <div class="card"><h3>后端：补齐履约底座</h3><p class="muted">通过体验课 ID、正价课 ID、优惠券 ID、CCID、SID 关系，支撑支付、自动植课、归因和复盘。</p></div>
-      </div>
     </section>
 
-    <section class="tab-panel" id="tab-priority">
-      <div class="section-head">
-        <div><div class="kicker">Priority</div><h2>再评估优先级：按价值、紧迫度、依赖和风险排序</h2></div>
-        <p class="desc">短期转化实验、长期交易底座、风控治理不应混在同一个需求池中。</p>
-      </div>
-      <div class="criteria">
-        <div class="criterion"><div class="num">1</div><h3>业务价值</h3><p>是否直接提升有效线索、首课、完课、正价购买或履约成功。</p></div>
-        <div class="criterion"><div class="num">2</div><h3>紧迫度</h3><p>是否影响当前渠道投放、营期承接、销售跟进和短期收入。</p></div>
-        <div class="criterion"><div class="num">3</div><h3>依赖关系</h3><p>是否依赖商品、订单、SID、CCID、企微回传等底层能力。</p></div>
-        <div class="criterion"><div class="num">4</div><h3>实施风险</h3><p>是否可能误伤用户、引发归因争议、增加运营或研发复杂度。</p></div>
-      </div>
+    <section class="layout">
+      <div id="questionList"></div>
 
-      <div class="section-head">
-        <div><div class="kicker">Sequencing</div><h2>建议推进顺序</h2></div>
-        <p class="desc">先用可验证的小实验证明转化空间，再投入更重的系统底座。</p>
-      </div>
-      <div class="priority-board">
-        <div class="lane">
-          <div class="prio-card"><div class="prio-badge p0">P0</div><div><h3>短期转化闭环</h3><p class="muted">报名页、企微承接、短信状态触发、埋点漏斗、首课阻塞问题。</p><ul><li>影响最前端漏斗</li><li>上线快，验证快</li><li>能直接判断 60% → 80% 是否成立</li></ul></div></div>
-          <div class="prio-card"><div class="prio-badge p1">P1</div><div><h3>首课激活与定级</h3><p class="muted">自动定级保留兜底，自主定级补准确性，CC 可见定级结果。</p><ul><li>服务首课开始率和完课率</li><li>不建议直接下线自动定级</li></ul></div></div>
-          <div class="prio-card"><div class="prio-badge p1">P1</div><div><h3>交易履约底座</h3><p class="muted">体验课 ID、正价课 ID、优惠券 ID、CCID、自动植课和 SID 关系。</p><ul><li>依赖重，但长期价值高</li><li>支撑支付、归因、履约、续报、拓科</li></ul></div></div>
-          <div class="prio-card"><div class="prio-badge watch">谨慎</div><div><h3>账号风控治理</h3><p class="muted">先监控异常，再验证、限制和处置，避免误伤正常家庭用户。</p></div></div>
-        </div>
-        <div class="panel">
-          <h3>优先级矩阵</h3>
-          <div class="matrix-simple" style="margin-top:12px;">
-            <div class="matrix-cell hot"><b>高价值 / 低依赖</b><p>报名页、企微承接、短信触发、埋点：优先做实验。</p></div>
-            <div class="matrix-cell build"><b>高价值 / 高依赖</b><p>商品 ID、订单归因、自动植课：先建模，再排期。</p></div>
-            <div class="matrix-cell experiment"><b>中价值 / 可验证</b><p>定级入口和 CC 可见：用首课、完课和调级率验证。</p></div>
-            <div class="matrix-cell defer"><b>风险高 / 口径不清</b><p>外教语速、低级别 AI 外教跳出等表意不明事项，先补问题定义。</p></div>
+      <aside class="rail">
+        <section class="card progress-card">
+          <div class="card-head">
+            <div>
+              <h3>确认进度</h3>
+              <div class="hint" id="progressText">尚未开始选择</div>
+            </div>
           </div>
-        </div>
-      </div>
+          <div class="progress-body">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="step-list" id="stepList"></div>
+          </div>
+        </section>
+
+        <section class="card summary-card">
+          <div class="card-head">
+            <div>
+              <h3>当前选择</h3>
+              <div class="hint">会随业务点击实时更新</div>
+            </div>
+          </div>
+          <div class="summary-body" id="answerList"></div>
+        </section>
+
+        <section class="card output-card desktop-output">
+          <div class="card-head">
+            <div>
+              <h3>最终确认文本</h3>
+              <div class="hint">全部选完后复制给产品</div>
+            </div>
+          </div>
+          <div class="output-body">
+            <div class="copy-row">
+              <div class="hint" id="copyHintDesktop">待完成全部选择</div>
+              <button class="btn primary" id="copyBtnDesktop" onclick="copySummary()" disabled>复制文本</button>
+            </div>
+            <textarea id="summaryDesktop" readonly></textarea>
+          </div>
+        </section>
+      </aside>
     </section>
 
-    <section class="tab-panel" id="tab-design">
-      <div class="section-head">
-        <div><div class="kicker">Feature Design</div><h2>针对每一项能力做具体设计</h2></div>
-        <p class="desc">每个模块都按“目标 → 方案 → 验收 → 边界”展开，避免只停留在功能名。</p>
+    <section class="card output-card mobile-output">
+      <div class="card-head">
+        <div>
+          <h3>最终确认文本</h3>
+          <div class="hint">全部选完后复制给产品</div>
+        </div>
       </div>
-      <div class="panel">
-        <div class="module-tabs">
-          <button class="module-btn active" data-module="m1">报名页与企微承接</button>
-          <button class="module-btn" data-module="m2">短信触达</button>
-          <button class="module-btn" data-module="m3">定级与首课激活</button>
-          <button class="module-btn" data-module="m4">商品 ID 与履约</button>
-          <button class="module-btn" data-module="m5">账号风控</button>
+      <div class="output-body">
+        <div class="copy-row">
+          <div class="hint" id="copyHintMobile">待完成全部选择</div>
+          <button class="btn primary" id="copyBtnMobile" onclick="copySummary()" disabled>复制文本</button>
         </div>
-
-        <div class="module-panel active" id="module-m1">
-          <div class="design-grid">
-            <div class="design-block"><h3>目标</h3><p class="muted">降低报名阻力，同时让家长在报名后明确知道下一步要添加老师，并可被 CC 稳定承接。</p><ul><li>报名页只保留手机号、学生年龄</li><li>确认验证码是否必须，平衡转化与虚假手机号</li><li>提交后不直接结束流程，而进入添加老师第二步</li></ul></div>
-            <div class="design-block"><h3>具体方案</h3><div class="checklist"><div class="check"><i>✓</i><span>二维码页展示具体利益点：课表、入群、上课提醒、答疑服务，而不是只写“添加 CC”。</span></div><div class="check"><i>✓</i><span>二维码按渠道、批次、CC 动态分配，避免单个企微容量和风控问题。</span></div><div class="check"><i>✓</i><span>提供长按识别二维码、复制微信号、短信兜底三种路径。</span></div><div class="check"><i>✓</i><span>企微侧回传添加成功和首次沟通状态，不能用二维码曝光替代加微成功。</span></div></div></div>
-          </div>
-        </div>
-
-        <div class="module-panel" id="module-m2">
-          <div class="design-grid">
-            <div class="design-block"><h3>目标</h3><p class="muted">短信不是“每天提醒”，而是在用户卡住的节点推动下一步动作。</p><ul><li>减少无效打扰</li><li>提高各节点召回率</li><li>让短信效果可归因</li></ul></div>
-            <div class="design-block"><h3>状态触发规则</h3><table><thead><tr><th>用户状态</th><th>短信目标</th></tr></thead><tbody><tr><td>已报名，未加微</td><td>提醒添加专属老师</td></tr><tr><td>已加微，未下载 App</td><td>提醒下载并登录</td></tr><tr><td>已登录，未开课</td><td>提醒首课开始</td></tr><tr><td>已开课，未完成</td><td>提醒继续完成体验课</td></tr><tr><td>已完成体验课</td><td>引导测评、反馈或转化</td></tr></tbody></table></div>
-          </div>
-        </div>
-
-        <div class="module-panel" id="module-m3">
-          <div class="design-grid">
-            <div class="design-block"><h3>目标</h3><p class="muted">定级不是为了多做一道流程，而是服务两个指标：首课开始率和体验课完课率。</p><ul><li>自动定级降低首课前阻力</li><li>自主定级提升初筛准确性</li><li>CC 可见定级结果，便于解释和修正</li></ul></div>
-            <div class="design-block"><h3>建议设计</h3><div class="checklist"><div class="check"><i>✓</i><span>自动定级保留为兜底，不建议直接下线。</span></div><div class="check"><i>✓</i><span>增加自主定级入口，让愿意配合的用户获得更准确结果。</span></div><div class="check"><i>✓</i><span>CC 端展示自动定级 / 自主定级来源、结果和时间。</span></div><div class="check"><i>✓</i><span>用首课开始率、完课率、调级率、家长反馈验证方案。</span></div></div></div>
-          </div>
-        </div>
-
-        <div class="module-panel" id="module-m4">
-          <div class="design-grid">
-            <div class="design-block"><h3>目标</h3><p class="muted">把体验课、正价课、优惠券从一次性运营配置，升级为可追踪、可支付、可自动履约的商品对象。</p><ul><li>体验课 ID：绑定产品线、课包、级别、时间、课表、限报</li><li>正价课 ID：绑定课包、价格、L1/L2、新签/续报</li><li>优惠券 ID：绑定有效期、适用范围和互斥规则</li></ul></div>
-            <div class="design-block"><h3>关键规则</h3><div class="checklist"><div class="check"><i>✓</i><span>正价课购课链接支持 CCID，用于订单归属判断。</span></div><div class="check"><i>✓</i><span>支付成功后自动给对应 SID 植入课程，无需人工处理。</span></div><div class="check"><i>✓</i><span>同一用户在 60 天内同产品线仅允许一个体验课 ID；再次购买应激活并同步，而不是重复购买。</span></div><div class="check"><i>✓</i><span>支持不同 SID 对应不同正价课 ID、LP 和 CC。</span></div></div></div>
-          </div>
-        </div>
-
-        <div class="module-panel" id="module-m5">
-          <div class="design-grid">
-            <div class="design-block"><h3>目标</h3><p class="muted">治理账号倒卖和异常共享，但不能误伤正常家庭用户的多设备、多地点场景。</p><ul><li>同账号多 IP / 多地登录</li><li>同账号多设备同时在线</li><li>同设备多账号或异常切换</li></ul></div>
-            <div class="design-block"><h3>分阶段策略</h3><div class="checklist"><div class="check"><i>✓</i><span>第一阶段：只做监控和风险标签，不直接拦截。</span></div><div class="check"><i>✓</i><span>第二阶段：高风险场景触发短信/验证码/重新登录验证。</span></div><div class="check"><i>✓</i><span>第三阶段：上线并发上限、踢下线、封禁和人工复核。</span></div><div class="check"><i>✓</i><span>预留白名单和申诉机制，处理正常家庭跨设备使用。</span></div></div></div>
-          </div>
-        </div>
+        <textarea id="summaryMobile" readonly></textarea>
       </div>
     </section>
-
-    <section class="tab-panel" id="tab-data">
-      <div class="section-head">
-        <div><div class="kicker">Data & Model</div><h2>用链路、指标和对象模型把方案连起来</h2></div>
-        <p class="desc">链路说明“用户怎么走”，指标说明“怎么判断有效”，对象模型说明“系统怎么承接”。</p>
-      </div>
-      <div class="panel">
-        <h3>完整业务链路</h3>
-        <div class="flow" style="margin-top:14px;">
-          <div class="step"><div class="dot"></div><strong>渠道获客</strong><span>小红书 / 投放 / 转介绍进入报名页。</span></div>
-          <div class="step"><div class="dot"></div><strong>报名留资</strong><span>手机号、学生年龄；确认验证码策略。</span></div>
-          <div class="step"><div class="dot"></div><strong>企微承接</strong><span>动态分配 CC，短信兜底，企微回传。</span></div>
-          <div class="step"><div class="dot"></div><strong>学习激活</strong><span>下载 App、登录、定级、首课。</span></div>
-          <div class="step"><div class="dot"></div><strong>体验转化</strong><span>体验课完课，CC 跟进正价转化。</span></div>
-          <div class="step"><div class="dot"></div><strong>交易履约</strong><span>H5 支付、CCID 归因、自动植课。</span></div>
-          <div class="step"><div class="dot"></div><strong>续报拓科</strong><span>持续上课、续报、拓科入口。</span></div>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top:16px;">
-        <div class="panel">
-          <h3>指标漏斗</h3>
-          <div class="funnel" style="margin-top:14px;">
-            <div class="funnel-row"><span>报名页访问</span><div class="bar-wrap"><div class="bar" style="width:100%">100%</div></div><span>渠道流量</span></div>
-            <div class="funnel-row"><span>完成留资</span><div class="bar-wrap"><div class="bar" style="width:76%">留资率</div></div><span>兴趣确认</span></div>
-            <div class="funnel-row"><span>企微添加成功</span><div class="bar-wrap"><div class="bar mid" style="width:60%">加微率</div></div><span>企微侧回传</span></div>
-            <div class="funnel-row"><span>首次有效沟通</span><div class="bar-wrap"><div class="bar mid" style="width:55%">沟通率</div></div><span>CC 承接</span></div>
-            <div class="funnel-row"><span>下载并登录</span><div class="bar-wrap"><div class="bar" style="width:46%">登录率</div></div><span>进入学习场</span></div>
-            <div class="funnel-row"><span>首课开始</span><div class="bar-wrap"><div class="bar low" style="width:32%">首课率</div></div><span>真实激活</span></div>
-            <div class="funnel-row"><span>体验课完课</span><div class="bar-wrap"><div class="bar low" style="width:24%">完课率</div></div><span>体验质量</span></div>
-            <div class="funnel-row"><span>购买正价课</span><div class="bar-wrap"><div class="bar low" style="width:12%">转化率</div></div><span>业务结果</span></div>
-          </div>
-          <p class="caption">示意图不代表真实数据。实际推进需按渠道、批次、CC、产品线、SID 拆分。</p>
-        </div>
-        <div class="panel">
-          <h3>核心对象模型</h3>
-          <div class="model-grid" style="grid-template-columns:1fr 1fr; margin-top:14px;">
-            <div class="card model-card"><h3>User 家长</h3><code>uid</code><code>手机号</code><code>微信号</code><span class="rel">账户、沟通、支付主体。</span></div>
-            <div class="card model-card"><h3>Student 学生</h3><code>sid</code><code>年龄</code><code>level</code><span class="rel">上课主体；同一 User 下可有多个 SID。</span></div>
-            <div class="card model-card"><h3>Trial SKU</h3><code>trial_id</code><code>产品线</code><code>课表</code><span class="rel">体验课售卖、限报和激活对象。</span></div>
-            <div class="card model-card"><h3>Paid SKU</h3><code>paid_id</code><code>L1/L2</code><code>价格</code><span class="rel">正价课支付与自动植课对象。</span></div>
-            <div class="card model-card"><h3>Coupon</h3><code>coupon_id</code><code>有效期</code><code>适用范围</code><span class="rel">活动优惠和转化策略对象。</span></div>
-            <div class="card model-card"><h3>Attribution</h3><code>cc_id</code><code>lp_id</code><code>order_id</code><span class="rel">销售归因、服务归属和复盘对象。</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="tab-panel" id="tab-list">
-      <div class="section-head">
-        <div><div class="kicker">Requirement List</div><h2>沉淀后的最终需求清单</h2></div>
-        <p class="desc">这是基于场景、优先级和方案设计整理后的需求池。表意不清的内容暂不直接进入排期。</p>
-      </div>
-      <div class="panel">
-        <table>
-          <thead><tr><th>优先级</th><th>模块</th><th>需求项</th><th>目标 / 验收口径</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td><span class="priority pri-p0">P0</span></td><td class="module-name">报名页优化</td><td>手机号 + 学生年龄；确认验证码策略；提交后进入添加老师第二步。</td><td>提升有效留资率与企微添加成功率。</td><td>先 A/B 测试页面与话术。</td></tr>
-            <tr><td><span class="priority pri-p0">P0</span></td><td class="module-name">企微承接页</td><td>动态 CC 二维码、复制微信号、利益点展示、短信兜底。</td><td>以企微回传添加成功为核心口径。</td><td>二维码曝光不能等同加微成功。</td></tr>
-            <tr><td><span class="priority pri-p0">P0</span></td><td class="module-name">埋点漏斗</td><td>覆盖报名、二维码曝光、复制、加微成功、首次沟通、下载、登录、首课、完课、购买。</td><td>可按渠道、批次、CC、产品线拆分。</td><td>用于验证 60% → 80% 是否真实有效。</td></tr>
-            <tr><td><span class="priority pri-p0">P0</span></td><td class="module-name">短信状态触发</td><td>按未加微、未下载、未登录、未开课、未完课、已完课触发。</td><td>提升节点召回率，降低无效打扰。</td><td>不建议简单 Day1/Day2/Day3 重复发。</td></tr>
-            <tr><td><span class="priority pri-p1">P1</span></td><td class="module-name">定级机制</td><td>保留自动定级兜底；新增自主定级；CC 可见结果和记录。</td><td>提升首课开始率、完课率，降低调级率。</td><td>不建议在未验证前直接下线自动定级。</td></tr>
-            <tr><td><span class="priority pri-p1">P1</span></td><td class="module-name">体验课 ID 化</td><td>绑定产品线、课包、级别、开课时间、价格、课表、限报规则。</td><td>支持体验课标准化售卖、追踪和限报。</td><td>例如 60 天内同产品线限制。</td></tr>
-            <tr><td><span class="priority pri-p1">P1</span></td><td class="module-name">正价课 ID 化</td><td>绑定课包、级别、价格、课表；支持双课包 L1 新签 + L2 续报。</td><td>支持 H5 支付和支付后自动植课。</td><td>交易履约核心底座。</td></tr>
-            <tr><td><span class="priority pri-p1">P1</span></td><td class="module-name">优惠券 ID 化</td><td>支持有效期、适用产品线、指定正价课 ID、限用和互斥。</td><td>支持活动配置、优惠策略和复盘。</td><td>需明确和商品包、订单的关系。</td></tr>
-            <tr><td><span class="priority pri-p1">P1</span></td><td class="module-name">CCID 归因与自动植课</td><td>购课链接支持 ccid；订单记录归属；支付成功给对应 SID 植课。</td><td>提升归因准确率，降低人工植课成本。</td><td>处理重复购买、换 CC、多个 SID 边界。</td></tr>
-            <tr><td><span class="priority pri-p2">P2</span></td><td class="module-name">User-SID-课包关系</td><td>明确 UID、手机号、微信号、SID、体验课、正价课、LP、CC 关系。</td><td>支撑续报、拓科、服务归属和订单复盘。</td><td>长期数据资产。</td></tr>
-            <tr><td><span class="priority pri-watch">谨慎</span></td><td class="module-name">账号风控治理</td><td>多 IP、多设备、账号共享监控；风险验证；并发上限；异常处置。</td><td>降低倒卖账号和异常共享。</td><td>先监控再限制，保留白名单和申诉机制。</td></tr>
-          </tbody>
-        </table>
-        <div class="note" style="margin-top:14px;"><b>暂不直接进入需求池：</b>“下周二下班前外教语速提速”“P1 部分下周二下班前解决（除低级别 AI 外教主动跳出）”当前表意不完整，建议先补充问题描述、影响范围、验收标准、责任系统和业务优先级。</div>
-      </div>
-
-      <div class="section-head">
-        <div><div class="kicker">Roadmap</div><h2>建议落地节奏</h2></div>
-        <p class="desc">分阶段推进，避免一开始就进入大系统改造。</p>
-      </div>
-      <div class="roadmap">
-        <div class="road"><div class="n">1</div><h3>第 1 阶段｜口径与快速实验</h3><ul><li>确认加微率分母与企微回传能力</li><li>补齐从报名到购课的漏斗埋点</li><li>报名页与二维码页 A/B 测试</li><li>短信状态触发简版上线</li></ul></div>
-        <div class="road"><div class="n">2</div><h3>第 2 阶段｜首课激活与对象建模</h3><ul><li>自动定级与自主定级并行验证</li><li>定义 Trial SKU / Paid SKU / Coupon</li><li>明确 UID、SID、订单、CC、LP 关系</li><li>梳理限报、重复购买、优惠券互斥规则</li></ul></div>
-        <div class="road"><div class="n">3</div><h3>第 3 阶段｜自动履约与风控</h3><ul><li>H5 支付后自动植课</li><li>建立履约成功率和人工干预监控</li><li>设备/IP 风控从监控升级到限制</li><li>建立白名单、申诉和人工复核机制</li></ul></div>
-      </div>
-    </section>
-
-    <div class="footer">增长承接与课程履约效率项目｜需求分析与产品方案</div>
   </main>
 
   <script>
-    const tabButtons = [...document.querySelectorAll('.tab-btn')];
-    const tabPanels = [...document.querySelectorAll('.tab-panel')];
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.tab;
-        tabButtons.forEach(b => b.classList.toggle('active', b === btn));
-        tabPanels.forEach(p => p.classList.toggle('active', p.id === `tab-${target}`));
-        window.scrollTo({ top: document.querySelector('.tabs-shell').offsetTop, behavior: 'smooth' });
-      });
-    });
+    const questions = [
+      {
+        id: 'scope',
+        title: '1. 权益按谁来配置？',
+        lead: '请假 / 休学权益到底跟着家庭走，还是跟着学生走。',
+        background: '这个选择会决定一个家庭下多个孩子是否共享权益，也会影响后续权益查询、扣减和赠送的对象。',
+        options: [
+          {
+            value: 'A',
+            label: '按 PID 配置',
+            tag: '家庭共享',
+            tagColor: 'blue',
+            desc: '一份请假 / 休学权益归属于家庭，同一 PID 下多个 SID 可能共用。',
+            pros: '适合按家庭购课、家庭统一管理权益的业务口径。',
+            cons: '需要明确多个孩子同时使用时的扣减顺序和展示口径。',
+            effects: '家长端更偏家庭维度展示；后台赠送和查询也更偏 PID。',
+            copyText: '请假 / 休学权益按 PID 配置，即按家庭维度生成和管理，同一 PID 下多个 SID 可共享权益。'
+          },
+          {
+            value: 'B',
+            label: '按 SID 配置',
+            tag: '学生独立',
+            tagColor: 'green',
+            desc: '每个学生单独拥有请假 / 休学权益，互不占用。',
+            pros: '权益归属清晰，适合每个学生独立计费、独立学习进度的口径。',
+            cons: '如果家庭希望多个孩子共享权益，需要额外转移或赠送规则。',
+            effects: '家长端按学生展示；后台赠送和扣减都落到 SID。',
+            copyText: '请假 / 休学权益按 SID 配置，即按学生维度生成和管理，不同 SID 的权益独立计算、独立消耗。'
+          }
+        ]
+      },
+      {
+        id: 'expiry',
+        title: '2. 课时用完后，权益还能不能继续用？',
+        lead: '课时消耗完，但请假 / 休学权益还没过期时，家长是否还能继续使用。',
+        background: '这个选择会直接影响家长端展示方式，也会决定后台赠送权益时填写“订单 ID”还是“失效时间”。',
+        options: [
+          {
+            value: 'A',
+            label: '可以继续用，按权益有效期走',
+            tag: '独立有效期',
+            tagColor: 'purple',
+            desc: '课时用完后，只要权益仍在有效期内，就可以继续使用。',
+            pros: '权益规则更灵活，赠送权益可以脱离订单单独管理。',
+            cons: '家长端需要单独展示请假 / 休学权益，研发需要独立判断有效期。',
+            effects: '赠送权益时填写失效时间；家长端不按课时包聚合展示。',
+            copyText: '课时消耗完后，请假 / 休学权益只要仍在有效期内即可继续使用；赠送权益时填写失效时间，家长端需单独展示权益。'
+          },
+          {
+            value: 'B',
+            label: '不继续用，跟随订单结束',
+            tag: '订单绑定',
+            tagColor: 'orange',
+            desc: '权益跟随订单 / 课时包，订单最后一次课程结束后，剩余权益同步失效。',
+            pros: '展示和扣减口径更贴近现有订单体系，业务理解成本低。',
+            cons: '赠送权益必须绑定主订单，不能完全独立存在。',
+            effects: '赠送权益时填写主订单 ID；家长端可按订单 / 课时包展示。',
+            copyText: '课时消耗完后，剩余请假 / 休学权益不再继续使用；权益跟随订单失效，赠送权益时需要填写主订单 ID。'
+          }
+        ]
+      },
+      {
+        id: 'businessLine',
+        title: '3. 新扣课时规则适用于哪些业务线？',
+        lead: '本次新增的 24h / 2h 请假取消规则，是否只作用于 sayABC。',
+        background: '当前理解是 sayABC 使用新规则，虎校维持原有 1 小时内扣课时逻辑。需要业务确认是否保持业务线差异。',
+        options: [
+          {
+            value: 'A',
+            label: '仅 sayABC 使用新规则，虎校不变',
+            tag: '当前倾向',
+            tagColor: 'green',
+            desc: 'sayABC 使用本次新增规则；虎校继续沿用 1 小时内取消扣课时。',
+            pros: '改动范围清晰，不影响虎校现有规则和用户预期。',
+            cons: '两条业务线规则不完全一致，客服说明时需要区分。',
+            effects: '研发需要按业务线判断；测试要覆盖 sayABC 和虎校两套规则。',
+            copyText: '本次新增扣课时规则仅适用于 sayABC；虎校维持原扣课时逻辑，即课程开始前 1 小时内取消扣课时。'
+          },
+          {
+            value: 'B',
+            label: 'sayABC 和虎校都使用新规则',
+            tag: '统一规则',
+            tagColor: 'blue',
+            desc: '两条业务线统一使用 24h 内取消扣课时、2h 内取消扣课时、请假不扣课时的规则。',
+            pros: '规则统一，客服和家长理解更简单。',
+            cons: '会改变虎校现有逻辑，需要确认历史用户和运营口径是否可接受。',
+            effects: '研发统一规则判断，但虎校涉及更大范围回归验证。',
+            copyText: '本次新增扣课时规则同时适用于 sayABC 和虎校，两条业务线统一使用新规则。'
+          },
+          {
+            value: 'C',
+            label: '其他规则，由业务补充',
+            tag: '需补充',
+            tagColor: 'gray',
+            desc: '如果 sayABC / 虎校还有更细分的规则，需要业务单独说明。',
+            pros: '保留灵活性，适合还有未覆盖业务场景。',
+            cons: '如果不补充清楚，研发无法直接落地。',
+            effects: '最终文本会标记为“需业务补充具体适用范围”。',
+            copyText: '新扣课时规则的业务线适用范围暂不按默认方案处理，需要业务进一步补充具体规则。'
+          }
+        ]
+      },
+      {
+        id: 'advancedQuota',
+        title: '4. 高阶课次数不足时，还能不能请假？',
+        lead: '高阶课需要消耗 2 个课时，也消耗 2 次请假机会。若只剩 1 次，请假是否允许提交。',
+        background: '这个选择会决定提交前是否做强校验，也会影响家长看到的失败提示或成功结果。',
+        options: [
+          {
+            value: 'A',
+            label: '不允许请假，提示次数不足',
+            tag: '强校验',
+            tagColor: 'green',
+            desc: '请假前校验权益是否足够 2 次，不足则无法提交。',
+            pros: '账务最清晰，不会出现权益不足但请假成功的情况。',
+            cons: '家长体验更严格，剩 1 次时无法使用部分权益。',
+            effects: '前端 / 后端都需要校验“高阶课所需次数”。',
+            copyText: '高阶课请假需要足够 2 次请假机会；若当前剩余不足 2 次，则不允许请假，并提示请假次数不足。'
+          },
+          {
+            value: 'B',
+            label: '允许请假，有几次扣几次',
+            tag: '宽松处理',
+            tagColor: 'orange',
+            desc: '只要还有请假次数即可提交，实际扣到 0 为止。',
+            pros: '家长体验更宽松，减少无法请假的拦截。',
+            cons: '规则不够严谨，可能出现高阶课应扣 2 次但只扣 1 次。',
+            effects: '需要明确不足部分是否仍免扣课时，避免账务歧义。',
+            copyText: '高阶课请假在次数不足 2 次时仍允许提交，有几次请假机会就扣几次，最多扣到 0。'
+          },
+          {
+            value: 'C',
+            label: '允许请假，但需从其他权益补足',
+            tag: '自动补足',
+            tagColor: 'purple',
+            desc: '当前来源不足时，继续查找其他订单 / 权益，凑够 2 次后允许。',
+            pros: '既保证扣满 2 次，又尽量提高请假成功率。',
+            cons: '扣减顺序更复杂，需要业务定义优先级。',
+            effects: '研发需要实现可用权益查找、排序和扣减记录。',
+            copyText: '高阶课请假在当前权益不足 2 次时，允许从其他订单 / 权益中补足，凑够 2 次后允许请假。'
+          }
+        ]
+      },
+      {
+        id: 'advancedOrder',
+        title: '5. 高阶课跨订单时，请假次数怎么扣？',
+        lead: '如果高阶课的 2 个课时分别来自订单 A 和订单 B，请假次数按订单来源扣，还是只看总次数。',
+        background: '这个选择会决定多订单场景下的扣减顺序，也会影响订单 A 无次数、订单 B 有次数时是否允许请假。',
+        options: [
+          {
+            value: 'A',
+            label: '按课时来源分别扣',
+            tag: '来源一致',
+            tagColor: 'green',
+            desc: '订单 A 出 1 个课时，就扣 A 的 1 次请假；订单 B 同理。',
+            pros: '课时来源和权益扣减一一对应，账务解释最清楚。',
+            cons: '任一来源订单无请假次数时，可能导致整节高阶课无法请假。',
+            effects: '需要按课时来源拆分校验和扣减。',
+            copyText: '高阶课如 2 个课时来自不同订单，请假次数按课时来源分别扣减：订单 A 消耗 1 次，订单 B 消耗 1 次。'
+          },
+          {
+            value: 'B',
+            label: '只看总次数，允许从任一订单扣 2 次',
+            tag: '总量优先',
+            tagColor: 'blue',
+            desc: '不强制按课时来源扣，只要该 PID / SID 下总请假次数足够 2 次即可。',
+            pros: '请假成功率更高，业务处理更灵活。',
+            cons: '订单来源和权益扣减不完全对应，后续解释成本更高。',
+            effects: '需要定义扣减优先级，例如先到期先扣、先主订单后赠送。',
+            copyText: '高阶课跨订单时，不强制按课时来源扣减；只要对应 PID / SID 下总请假次数足够 2 次，即允许从任一可用订单 / 权益中扣满 2 次。'
+          },
+          {
+            value: 'C',
+            label: '对应订单没有次数就不允许',
+            tag: '严格绑定',
+            tagColor: 'orange',
+            desc: '只要某个课时来源订单没有请假次数，即使其他订单次数足够，也不允许请假。',
+            pros: '订单和权益严格绑定，逻辑边界明确。',
+            cons: '体验最严格，可能出现总次数足够但仍无法请假的情况。',
+            effects: '拦截提示需要说明是哪一个订单权益不足。',
+            copyText: '高阶课跨订单时，请假权益严格绑定课时来源订单；若任一来源订单没有可用请假次数，则不允许请假。'
+          }
+        ]
+      }
+    ];
 
-    const moduleButtons = [...document.querySelectorAll('.module-btn')];
-    const modulePanels = [...document.querySelectorAll('.module-panel')];
-    moduleButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.module;
-        moduleButtons.forEach(b => b.classList.toggle('active', b === btn));
-        modulePanels.forEach(p => p.classList.toggle('active', p.id === `module-${target}`));
+    const appState = { answers: {} };
+
+    const questionList = document.getElementById('questionList');
+    const stepList = document.getElementById('stepList');
+    const answerList = document.getElementById('answerList');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const toast = document.getElementById('toast');
+
+    function renderQuestions() {
+      questionList.innerHTML = questions.map(q => {
+        const gridClass = q.options.length === 3 ? 'option-grid three' : 'option-grid';
+        return `<section class="card decision-card" id="card-${q.id}">
+          <div class="card-head">
+            <div>
+              <h2>${q.title}</h2>
+              <div class="hint">${q.lead}</div>
+            </div>
+            <span class="tag gray" id="status-${q.id}">待选择</span>
+          </div>
+          <div class="decision-body">
+            <div class="context-box"><b>背景信息</b><div>${q.background}</div></div>
+            <div class="${gridClass}">
+              ${q.options.map(opt => renderOption(q, opt)).join('')}
+            </div>
+          </div>
+        </section>`;
+      }).join('');
+    }
+
+    function renderOption(q, opt) {
+      return `<button class="option-card" id="option-${q.id}-${opt.value}" onclick="selectOption('${q.id}', '${opt.value}')">
+        <div class="option-top">
+          <span class="option-letter">${opt.value}</span>
+          <div class="option-title">${opt.label}</div>
+          <span class="tag ${opt.tagColor}">${opt.tag}</span>
+        </div>
+        <div class="option-desc">${opt.desc}</div>
+        <div class="tradeoff">
+          <div class="tradeoff-row good"><b>优点</b><br>${opt.pros}</div>
+          <div class="tradeoff-row cost"><b>代价</b><br>${opt.cons}</div>
+          <div class="tradeoff-row effect"><b>影响</b><br>${opt.effects}</div>
+        </div>
+      </button>`;
+    }
+
+    function selectOption(questionId, value) {
+      appState.answers[questionId] = value;
+      renderAll();
+    }
+
+    function renderProgress() {
+      const answered = questions.filter(q => appState.answers[q.id]).length;
+      const total = questions.length;
+      progressFill.style.width = `${Math.round(answered / total * 100)}%`;
+      progressText.textContent = answered === total ? '已完成全部选择，可以复制结果' : `已完成 ${answered} / ${total} 个选择`;
+      stepList.innerHTML = questions.map((q, idx) => {
+        const opt = getSelectedOption(q);
+        return `<div class="step-item ${opt ? 'done' : ''}" onclick="document.getElementById('card-${q.id}').scrollIntoView({behavior:'smooth', block:'start'})">
+          <div class="step-num">${opt ? '✓' : idx + 1}</div>
+          <div><b>${q.title.replace(/^\d+\.\s*/, '')}</b><br><span>${opt ? `${opt.value}. ${opt.label}` : '待业务选择'}</span></div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderSelections() {
+      questions.forEach(q => {
+        q.options.forEach(opt => {
+          const el = document.getElementById(`option-${q.id}-${opt.value}`);
+          if (el) el.classList.toggle('active', appState.answers[q.id] === opt.value);
+        });
+        const status = document.getElementById(`status-${q.id}`);
+        const selected = getSelectedOption(q);
+        if (status) {
+          status.className = `tag ${selected ? 'green' : 'gray'}`;
+          status.textContent = selected ? `已选 ${selected.value}` : '待选择';
+        }
       });
-    });
+
+      const selectedQuestions = questions.filter(q => appState.answers[q.id]);
+      if (!selectedQuestions.length) {
+        answerList.innerHTML = '<div class="empty">业务每选择一个选项，这里会同步显示当前结论。</div>';
+        return;
+      }
+      answerList.innerHTML = selectedQuestions.map(q => {
+        const opt = getSelectedOption(q);
+        return `<div class="answer-item"><b>${q.title}</b><span>${opt.value}. ${opt.label}<br>${opt.effects}</span></div>`;
+      }).join('');
+    }
+
+    function renderSummary() {
+      const complete = questions.every(q => appState.answers[q.id]);
+      const text = buildSummary();
+      document.getElementById('summaryDesktop').value = text;
+      document.getElementById('summaryMobile').value = text;
+      ['Desktop', 'Mobile'].forEach(type => {
+        const btn = document.getElementById(`copyBtn${type}`);
+        const hint = document.getElementById(`copyHint${type}`);
+        btn.disabled = !complete;
+        hint.textContent = complete ? '已生成完整确认文本' : '待完成全部选择';
+      });
+    }
+
+    function buildSummary() {
+      const missing = questions.filter(q => !appState.answers[q.id]);
+      const lines = ['请假 / 休学规则业务确认结果：', ''];
+
+      questions.forEach(q => {
+        const opt = getSelectedOption(q);
+        lines.push(`${q.title}`);
+        lines.push(opt ? `- 选择：${opt.value}. ${opt.label}` : '- 选择：待确认');
+        lines.push(opt ? `- 规则：${opt.copyText}` : '- 规则：暂无，需业务补充选择');
+        lines.push('');
+      });
+
+      if (missing.length) {
+        lines.push(`仍有 ${missing.length} 项待确认：${missing.map(q => q.title.replace(/^\d+\.\s*/, '')).join('、')}。`);
+      } else {
+        lines.push('以上为本次业务确认结果，可按该规则进入产品方案和研发落地。');
+      }
+
+      return lines.join('\n');
+    }
+
+    function getSelectedOption(q) {
+      return q.options.find(opt => opt.value === appState.answers[q.id]);
+    }
+
+    async function copySummary() {
+      const text = buildSummary();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('已复制确认文本');
+      } catch (error) {
+        const textarea = document.getElementById(window.innerWidth <= 1080 ? 'summaryMobile' : 'summaryDesktop');
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        showToast('已复制确认文本');
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function renderAll() {
+      renderProgress();
+      renderSelections();
+      renderSummary();
+    }
+
+    renderQuestions();
+    renderAll();
   </script>
 </body>
 </html>
