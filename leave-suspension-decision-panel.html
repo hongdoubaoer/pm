@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>请假休学规则决策面板</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #e6eaf2;
+      --blue: #2563eb;
+      --blue2: #eaf1ff;
+      --green: #12a66a;
+      --green2: #e9f8f1;
+      --orange: #f59e0b;
+      --orange2: #fff5df;
+      --red: #e5484d;
+      --red2: #fff0f1;
+      --purple: #7c3aed;
+      --purple2: #f3ecff;
+      --shadow: 0 18px 45px rgba(23, 32, 51, .1);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0, #dfeaff 0, transparent 26%),
+        radial-gradient(circle at 94% 0, #f5eafe 0, transparent 24%),
+        var(--bg);
+      font-size: 14px;
+    }
+
+    button, textarea { font-family: inherit; }
+
+    .page {
+      width: min(1280px, 100%);
+      margin: 0 auto;
+      padding: 26px 22px 64px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr .8fr;
+      gap: 18px;
+      margin-bottom: 16px;
+      align-items: stretch;
+    }
+
+    .hero-main, .hero-side, .card {
+      background: rgba(255, 255, 255, .92);
+      border: 1px solid rgba(230, 234, 242, .95);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(23, 32, 51, .06);
+    }
+
+    .hero-main { padding: 26px; }
+    .hero-side { padding: 18px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1d4ed8;
+      background: var(--blue2);
+      border: 1px solid #c7d7fe;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      letter-spacing: 0;
+      line-height: 1.18;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 13px;
+      background: #fbfcff;
+      min-height: 74px;
+    }
+
+    .metric b {
+      display: block;
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    .hero-side h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .hero-side ol {
+      margin: 0;
+      padding-left: 20px;
+      color: #475467;
+      line-height: 1.85;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .rail {
+      position: sticky;
+      top: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card-head {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .card-head h2, .card-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-top: 5px;
+    }
+
+    .decision-card {
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .decision-body {
+      padding: 18px 20px 20px;
+    }
+
+    .context-box {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid #dbe6fb;
+      background: #f8fbff;
+      border-radius: 14px;
+      padding: 14px;
+      color: #475467;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .context-box b {
+      color: #1d4ed8;
+      font-size: 13px;
+    }
+
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .option-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .option-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 15px;
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: .16s ease;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: inherit;
+    }
+
+    .option-card:hover {
+      transform: translateY(-1px);
+      border-color: #afc4ff;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, .08);
+    }
+
+    .option-card.active {
+      border-color: #8fb0ff;
+      background: linear-gradient(180deg, #f7faff, #ffffff);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .option-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .option-letter {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      color: #1d4ed8;
+      background: var(--blue2);
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .option-title {
+      font-weight: 900;
+      font-size: 15px;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .tag.blue { color: #1d4ed8; background: var(--blue2); }
+    .tag.green { color: #08784f; background: var(--green2); }
+    .tag.orange { color: #a15c07; background: var(--orange2); }
+    .tag.red { color: #b42318; background: var(--red2); }
+    .tag.purple { color: #6d28d9; background: var(--purple2); }
+    .tag.gray { color: #475467; background: #f2f4f7; }
+
+    .option-desc {
+      color: #475467;
+      line-height: 1.62;
+      font-size: 13px;
+      min-height: 42px;
+    }
+
+    .tradeoff {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .tradeoff-row {
+      border-radius: 12px;
+      padding: 10px 11px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #475467;
+    }
+
+    .tradeoff-row.good { background: var(--green2); color: #066044; }
+    .tradeoff-row.cost { background: var(--orange2); color: #8a4a05; }
+    .tradeoff-row.effect { background: #f8fafc; color: #475467; border: 1px dashed #ccd6e4; }
+
+    .progress-card, .summary-card, .output-card { overflow: hidden; }
+
+    .progress-body, .summary-body, .output-body { padding: 16px; }
+
+    .progress-bar {
+      height: 9px;
+      background: #eef2f7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0 14px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      border-radius: inherit;
+      transition: width .2s ease;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .step-item {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 9px;
+      color: #475467;
+      background: #fff;
+      line-height: 1.4;
+    }
+
+    .step-num {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #f2f4f7;
+      color: #667085;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .step-item.done {
+      border-color: #a9e8ca;
+      background: #f9fffb;
+    }
+
+    .step-item.done .step-num {
+      background: var(--green2);
+      color: #08784f;
+    }
+
+    .answer-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .answer-item {
+      border: 1px solid var(--line);
+      background: #fbfcff;
+      border-radius: 12px;
+      padding: 11px;
+    }
+
+    .answer-item b {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .answer-item span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 10px 0;
+    }
+
+    .copy-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .copy-row .hint { margin: 0; }
+
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 9px 13px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .16s ease;
+      white-space: nowrap;
+    }
+
+    .btn.primary { color: #fff; background: var(--blue); }
+    .btn.primary:hover { background: #1d4ed8; }
+    .btn.secondary { color: #344054; background: #eef2f7; }
+    .btn.ghost { color: #1d4ed8; background: var(--blue2); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #344054;
+      background: #fbfcff;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 80;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-14px);
+      opacity: 0;
+      pointer-events: none;
+      color: #fff;
+      background: #111827;
+      border-radius: 999px;
+      padding: 12px 16px;
+      box-shadow: var(--shadow);
+      transition: .2s ease;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .mobile-output { display: none; }
+
+    @media (max-width: 1080px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .rail { position: static; }
+      .desktop-output { display: none; }
+      .mobile-output { display: block; }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 18px 14px 40px; }
+      .metrics, .option-grid, .option-grid.three { grid-template-columns: 1fr; }
+      .context-box { grid-template-columns: 1fr; }
+      h1 { font-size: 26px; }
+      .hero-main, .hero-side, .decision-body, .card-head { padding: 16px; }
+      .copy-row { align-items: stretch; flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">请假 / 休学规则确认</div>
+        <h1>业务决策面板</h1>
+        <p class="subtitle">这页用于快速确认研发落地前的关键规则。请按每张卡片选择 A / B / C，全部选完后，页面底部会自动生成一段确认文字，可以一键复制发回给产品。</p>
+        <div class="metrics">
+          <div class="metric"><b>5</b><span>需要拍板的规则</span></div>
+          <div class="metric"><b>2-3</b><span>每题选项数量</span></div>
+          <div class="metric"><b>自动</b><span>生成确认文字</span></div>
+          <div class="metric"><b>1键</b><span>复制结果给产品</span></div>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <h2>怎么使用</h2>
+        <ol>
+          <li>先看每题的背景和选项影响。</li>
+          <li>直接点击最符合业务规则的选项。</li>
+          <li>全部选完后复制底部文本。</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="layout">
+      <div id="questionList"></div>
+
+      <aside class="rail">
+        <section class="card progress-card">
+          <div class="card-head">
+            <div>
+              <h3>确认进度</h3>
+              <div class="hint" id="progressText">尚未开始选择</div>
+            </div>
+          </div>
+          <div class="progress-body">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="step-list" id="stepList"></div>
+          </div>
+        </section>
+
+        <section class="card summary-card">
+          <div class="card-head">
+            <div>
+              <h3>当前选择</h3>
+              <div class="hint">会随业务点击实时更新</div>
+            </div>
+          </div>
+          <div class="summary-body" id="answerList"></div>
+        </section>
+
+        <section class="card output-card desktop-output">
+          <div class="card-head">
+            <div>
+              <h3>最终确认文本</h3>
+              <div class="hint">全部选完后复制给产品</div>
+            </div>
+          </div>
+          <div class="output-body">
+            <div class="copy-row">
+              <div class="hint" id="copyHintDesktop">待完成全部选择</div>
+              <button class="btn primary" id="copyBtnDesktop" onclick="copySummary()" disabled>复制文本</button>
+            </div>
+            <textarea id="summaryDesktop" readonly></textarea>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="card output-card mobile-output">
+      <div class="card-head">
+        <div>
+          <h3>最终确认文本</h3>
+          <div class="hint">全部选完后复制给产品</div>
+        </div>
+      </div>
+      <div class="output-body">
+        <div class="copy-row">
+          <div class="hint" id="copyHintMobile">待完成全部选择</div>
+          <button class="btn primary" id="copyBtnMobile" onclick="copySummary()" disabled>复制文本</button>
+        </div>
+        <textarea id="summaryMobile" readonly></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        id: 'scope',
+        title: '1. 权益按谁来配置？',
+        lead: '请假 / 休学权益到底跟着家庭走，还是跟着学生走。',
+        background: '这个选择会决定一个家庭下多个孩子是否共享权益，也会影响后续权益查询、扣减和赠送的对象。',
+        options: [
+          {
+            value: 'A',
+            label: '按 PID 配置',
+            tag: '家庭共享',
+            tagColor: 'blue',
+            desc: '一份请假 / 休学权益归属于家庭，同一 PID 下多个 SID 可能共用。',
+            pros: '适合按家庭购课、家庭统一管理权益的业务口径。',
+            cons: '需要明确多个孩子同时使用时的扣减顺序和展示口径。',
+            effects: '家长端更偏家庭维度展示；后台赠送和查询也更偏 PID。',
+            copyText: '请假 / 休学权益按 PID 配置，即按家庭维度生成和管理，同一 PID 下多个 SID 可共享权益。'
+          },
+          {
+            value: 'B',
+            label: '按 SID 配置',
+            tag: '学生独立',
+            tagColor: 'green',
+            desc: '每个学生单独拥有请假 / 休学权益，互不占用。',
+            pros: '权益归属清晰，适合每个学生独立计费、独立学习进度的口径。',
+            cons: '如果家庭希望多个孩子共享权益，需要额外转移或赠送规则。',
+            effects: '家长端按学生展示；后台赠送和扣减都落到 SID。',
+            copyText: '请假 / 休学权益按 SID 配置，即按学生维度生成和管理，不同 SID 的权益独立计算、独立消耗。'
+          }
+        ]
+      },
+      {
+        id: 'expiry',
+        title: '2. 课时用完后，权益还能不能继续用？',
+        lead: '课时消耗完，但请假 / 休学权益还没过期时，家长是否还能继续使用。',
+        background: '这个选择会直接影响家长端展示方式，也会决定后台赠送权益时填写“订单 ID”还是“失效时间”。',
+        options: [
+          {
+            value: 'A',
+            label: '可以继续用，按权益有效期走',
+            tag: '独立有效期',
+            tagColor: 'purple',
+            desc: '课时用完后，只要权益仍在有效期内，就可以继续使用。',
+            pros: '权益规则更灵活，赠送权益可以脱离订单单独管理。',
+            cons: '家长端需要单独展示请假 / 休学权益，研发需要独立判断有效期。',
+            effects: '赠送权益时填写失效时间；家长端不按课时包聚合展示。',
+            copyText: '课时消耗完后，请假 / 休学权益只要仍在有效期内即可继续使用；赠送权益时填写失效时间，家长端需单独展示权益。'
+          },
+          {
+            value: 'B',
+            label: '不继续用，跟随订单结束',
+            tag: '订单绑定',
+            tagColor: 'orange',
+            desc: '权益跟随订单 / 课时包，订单最后一次课程结束后，剩余权益同步失效。',
+            pros: '展示和扣减口径更贴近现有订单体系，业务理解成本低。',
+            cons: '赠送权益必须绑定主订单，不能完全独立存在。',
+            effects: '赠送权益时填写主订单 ID；家长端可按订单 / 课时包展示。',
+            copyText: '课时消耗完后，剩余请假 / 休学权益不再继续使用；权益跟随订单失效，赠送权益时需要填写主订单 ID。'
+          }
+        ]
+      },
+      {
+        id: 'businessLine',
+        title: '3. 新扣课时规则适用于哪些业务线？',
+        lead: '本次新增的 24h / 2h 请假取消规则，是否只作用于 sayABC。',
+        background: '当前理解是 sayABC 使用新规则，虎校维持原有 1 小时内扣课时逻辑。需要业务确认是否保持业务线差异。',
+        options: [
+          {
+            value: 'A',
+            label: '仅 sayABC 使用新规则，虎校不变',
+            tag: '当前倾向',
+            tagColor: 'green',
+            desc: 'sayABC 使用本次新增规则；虎校继续沿用 1 小时内取消扣课时。',
+            pros: '改动范围清晰，不影响虎校现有规则和用户预期。',
+            cons: '两条业务线规则不完全一致，客服说明时需要区分。',
+            effects: '研发需要按业务线判断；测试要覆盖 sayABC 和虎校两套规则。',
+            copyText: '本次新增扣课时规则仅适用于 sayABC；虎校维持原扣课时逻辑，即课程开始前 1 小时内取消扣课时。'
+          },
+          {
+            value: 'B',
+            label: 'sayABC 和虎校都使用新规则',
+            tag: '统一规则',
+            tagColor: 'blue',
+            desc: '两条业务线统一使用 24h 内取消扣课时、2h 内取消扣课时、请假不扣课时的规则。',
+            pros: '规则统一，客服和家长理解更简单。',
+            cons: '会改变虎校现有逻辑，需要确认历史用户和运营口径是否可接受。',
+            effects: '研发统一规则判断，但虎校涉及更大范围回归验证。',
+            copyText: '本次新增扣课时规则同时适用于 sayABC 和虎校，两条业务线统一使用新规则。'
+          },
+          {
+            value: 'C',
+            label: '其他规则，由业务补充',
+            tag: '需补充',
+            tagColor: 'gray',
+            desc: '如果 sayABC / 虎校还有更细分的规则，需要业务单独说明。',
+            pros: '保留灵活性，适合还有未覆盖业务场景。',
+            cons: '如果不补充清楚，研发无法直接落地。',
+            effects: '最终文本会标记为“需业务补充具体适用范围”。',
+            copyText: '新扣课时规则的业务线适用范围暂不按默认方案处理，需要业务进一步补充具体规则。'
+          }
+        ]
+      },
+      {
+        id: 'advancedQuota',
+        title: '4. 高阶课次数不足时，还能不能请假？',
+        lead: '高阶课需要消耗 2 个课时，也消耗 2 次请假机会。若只剩 1 次，请假是否允许提交。',
+        background: '这个选择会决定提交前是否做强校验，也会影响家长看到的失败提示或成功结果。',
+        options: [
+          {
+            value: 'A',
+            label: '不允许请假，提示次数不足',
+            tag: '强校验',
+            tagColor: 'green',
+            desc: '请假前校验权益是否足够 2 次，不足则无法提交。',
+            pros: '账务最清晰，不会出现权益不足但请假成功的情况。',
+            cons: '家长体验更严格，剩 1 次时无法使用部分权益。',
+            effects: '前端 / 后端都需要校验“高阶课所需次数”。',
+            copyText: '高阶课请假需要足够 2 次请假机会；若当前剩余不足 2 次，则不允许请假，并提示请假次数不足。'
+          },
+          {
+            value: 'B',
+            label: '允许请假，有几次扣几次',
+            tag: '宽松处理',
+            tagColor: 'orange',
+            desc: '只要还有请假次数即可提交，实际扣到 0 为止。',
+            pros: '家长体验更宽松，减少无法请假的拦截。',
+            cons: '规则不够严谨，可能出现高阶课应扣 2 次但只扣 1 次。',
+            effects: '需要明确不足部分是否仍免扣课时，避免账务歧义。',
+            copyText: '高阶课请假在次数不足 2 次时仍允许提交，有几次请假机会就扣几次，最多扣到 0。'
+          },
+          {
+            value: 'C',
+            label: '允许请假，但需从其他权益补足',
+            tag: '自动补足',
+            tagColor: 'purple',
+            desc: '当前来源不足时，继续查找其他订单 / 权益，凑够 2 次后允许。',
+            pros: '既保证扣满 2 次，又尽量提高请假成功率。',
+            cons: '扣减顺序更复杂，需要业务定义优先级。',
+            effects: '研发需要实现可用权益查找、排序和扣减记录。',
+            copyText: '高阶课请假在当前权益不足 2 次时，允许从其他订单 / 权益中补足，凑够 2 次后允许请假。'
+          }
+        ]
+      },
+      {
+        id: 'advancedOrder',
+        title: '5. 高阶课跨订单时，请假次数怎么扣？',
+        lead: '如果高阶课的 2 个课时分别来自订单 A 和订单 B，请假次数按订单来源扣，还是只看总次数。',
+        background: '这个选择会决定多订单场景下的扣减顺序，也会影响订单 A 无次数、订单 B 有次数时是否允许请假。',
+        options: [
+          {
+            value: 'A',
+            label: '按课时来源分别扣',
+            tag: '来源一致',
+            tagColor: 'green',
+            desc: '订单 A 出 1 个课时，就扣 A 的 1 次请假；订单 B 同理。',
+            pros: '课时来源和权益扣减一一对应，账务解释最清楚。',
+            cons: '任一来源订单无请假次数时，可能导致整节高阶课无法请假。',
+            effects: '需要按课时来源拆分校验和扣减。',
+            copyText: '高阶课如 2 个课时来自不同订单，请假次数按课时来源分别扣减：订单 A 消耗 1 次，订单 B 消耗 1 次。'
+          },
+          {
+            value: 'B',
+            label: '只看总次数，允许从任一订单扣 2 次',
+            tag: '总量优先',
+            tagColor: 'blue',
+            desc: '不强制按课时来源扣，只要该 PID / SID 下总请假次数足够 2 次即可。',
+            pros: '请假成功率更高，业务处理更灵活。',
+            cons: '订单来源和权益扣减不完全对应，后续解释成本更高。',
+            effects: '需要定义扣减优先级，例如先到期先扣、先主订单后赠送。',
+            copyText: '高阶课跨订单时，不强制按课时来源扣减；只要对应 PID / SID 下总请假次数足够 2 次，即允许从任一可用订单 / 权益中扣满 2 次。'
+          },
+          {
+            value: 'C',
+            label: '对应订单没有次数就不允许',
+            tag: '严格绑定',
+            tagColor: 'orange',
+            desc: '只要某个课时来源订单没有请假次数，即使其他订单次数足够，也不允许请假。',
+            pros: '订单和权益严格绑定，逻辑边界明确。',
+            cons: '体验最严格，可能出现总次数足够但仍无法请假的情况。',
+            effects: '拦截提示需要说明是哪一个订单权益不足。',
+            copyText: '高阶课跨订单时，请假权益严格绑定课时来源订单；若任一来源订单没有可用请假次数，则不允许请假。'
+          }
+        ]
+      }
+    ];
+
+    const appState = { answers: {} };
+
+    const questionList = document.getElementById('questionList');
+    const stepList = document.getElementById('stepList');
+    const answerList = document.getElementById('answerList');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const toast = document.getElementById('toast');
+
+    function renderQuestions() {
+      questionList.innerHTML = questions.map(q => {
+        const gridClass = q.options.length === 3 ? 'option-grid three' : 'option-grid';
+        return `<section class="card decision-card" id="card-${q.id}">
+          <div class="card-head">
+            <div>
+              <h2>${q.title}</h2>
+              <div class="hint">${q.lead}</div>
+            </div>
+            <span class="tag gray" id="status-${q.id}">待选择</span>
+          </div>
+          <div class="decision-body">
+            <div class="context-box"><b>背景信息</b><div>${q.background}</div></div>
+            <div class="${gridClass}">
+              ${q.options.map(opt => renderOption(q, opt)).join('')}
+            </div>
+          </div>
+        </section>`;
+      }).join('');
+    }
+
+    function renderOption(q, opt) {
+      return `<button class="option-card" id="option-${q.id}-${opt.value}" onclick="selectOption('${q.id}', '${opt.value}')">
+        <div class="option-top">
+          <span class="option-letter">${opt.value}</span>
+          <div class="option-title">${opt.label}</div>
+          <span class="tag ${opt.tagColor}">${opt.tag}</span>
+        </div>
+        <div class="option-desc">${opt.desc}</div>
+        <div class="tradeoff">
+          <div class="tradeoff-row good"><b>优点</b><br>${opt.pros}</div>
+          <div class="tradeoff-row cost"><b>代价</b><br>${opt.cons}</div>
+          <div class="tradeoff-row effect"><b>影响</b><br>${opt.effects}</div>
+        </div>
+      </button>`;
+    }
+
+    function selectOption(questionId, value) {
+      appState.answers[questionId] = value;
+      renderAll();
+    }
+
+    function renderProgress() {
+      const answered = questions.filter(q => appState.answers[q.id]).length;
+      const total = questions.length;
+      progressFill.style.width = `${Math.round(answered / total * 100)}%`;
+      progressText.textContent = answered === total ? '已完成全部选择，可以复制结果' : `已完成 ${answered} / ${total} 个选择`;
+      stepList.innerHTML = questions.map((q, idx) => {
+        const opt = getSelectedOption(q);
+        return `<div class="step-item ${opt ? 'done' : ''}" onclick="document.getElementById('card-${q.id}').scrollIntoView({behavior:'smooth', block:'start'})">
+          <div class="step-num">${opt ? '✓' : idx + 1}</div>
+          <div><b>${q.title.replace(/^\d+\.\s*/, '')}</b><br><span>${opt ? `${opt.value}. ${opt.label}` : '待业务选择'}</span></div>
+        </div>`;
+      }).join('');
+    }
+
+    function renderSelections() {
+      questions.forEach(q => {
+        q.options.forEach(opt => {
+          const el = document.getElementById(`option-${q.id}-${opt.value}`);
+          if (el) el.classList.toggle('active', appState.answers[q.id] === opt.value);
+        });
+        const status = document.getElementById(`status-${q.id}`);
+        const selected = getSelectedOption(q);
+        if (status) {
+          status.className = `tag ${selected ? 'green' : 'gray'}`;
+          status.textContent = selected ? `已选 ${selected.value}` : '待选择';
+        }
+      });
+
+      const selectedQuestions = questions.filter(q => appState.answers[q.id]);
+      if (!selectedQuestions.length) {
+        answerList.innerHTML = '<div class="empty">业务每选择一个选项，这里会同步显示当前结论。</div>';
+        return;
+      }
+      answerList.innerHTML = selectedQuestions.map(q => {
+        const opt = getSelectedOption(q);
+        return `<div class="answer-item"><b>${q.title}</b><span>${opt.value}. ${opt.label}<br>${opt.effects}</span></div>`;
+      }).join('');
+    }
+
+    function renderSummary() {
+      const complete = questions.every(q => appState.answers[q.id]);
+      const text = buildSummary();
+      document.getElementById('summaryDesktop').value = text;
+      document.getElementById('summaryMobile').value = text;
+      ['Desktop', 'Mobile'].forEach(type => {
+        const btn = document.getElementById(`copyBtn${type}`);
+        const hint = document.getElementById(`copyHint${type}`);
+        btn.disabled = !complete;
+        hint.textContent = complete ? '已生成完整确认文本' : '待完成全部选择';
+      });
+    }
+
+    function buildSummary() {
+      const missing = questions.filter(q => !appState.answers[q.id]);
+      const lines = ['请假 / 休学规则业务确认结果：', ''];
+
+      questions.forEach(q => {
+        const opt = getSelectedOption(q);
+        lines.push(`${q.title}`);
+        lines.push(opt ? `- 选择：${opt.value}. ${opt.label}` : '- 选择：待确认');
+        lines.push(opt ? `- 规则：${opt.copyText}` : '- 规则：暂无，需业务补充选择');
+        lines.push('');
+      });
+
+      if (missing.length) {
+        lines.push(`仍有 ${missing.length} 项待确认：${missing.map(q => q.title.replace(/^\d+\.\s*/, '')).join('、')}。`);
+      } else {
+        lines.push('以上为本次业务确认结果，可按该规则进入产品方案和研发落地。');
+      }
+
+      return lines.join('\n');
+    }
+
+    function getSelectedOption(q) {
+      return q.options.find(opt => opt.value === appState.answers[q.id]);
+    }
+
+    async function copySummary() {
+      const text = buildSummary();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('已复制确认文本');
+      } catch (error) {
+        const textarea = document.getElementById(window.innerWidth <= 1080 ? 'summaryMobile' : 'summaryDesktop');
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        showToast('已复制确认文本');
+      }
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function renderAll() {
+      renderProgress();
+      renderSelections();
+      renderSummary();
+    }
+
+    renderQuestions();
+    renderAll();
+  </script>
+</body>
+</html>
